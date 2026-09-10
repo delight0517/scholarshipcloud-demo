@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ScholarCloud Demo</title>
+  <meta name="description" content="장학금, 해외 유학 지원, 정부/기업 지원 공고를 개인 조건에 맞게 정리하는 데모 서비스">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18212f;
+      --muted: #667085;
+      --line: #d8dee8;
+      --paper: #f7f8fb;
+      --panel: #ffffff;
+      --blue: #1769aa;
+      --teal: #087d75;
+      --gold: #a16613;
+      --rose: #b42318;
+      --shadow: 0 18px 45px rgba(23, 37, 84, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+    }
+
+    aside {
+      background: #111827;
+      color: white;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #2dd4bf;
+      color: #0f172a;
+      font-weight: 900;
+    }
+
+    nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    nav button, .icon-button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    nav button {
+      color: #d1d5db;
+      background: transparent;
+      border-radius: 8px;
+      padding: 11px 12px;
+      text-align: left;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    nav button.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .profile {
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+      padding-top: 18px;
+      display: grid;
+      gap: 10px;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    main {
+      padding: 28px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.12;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .refresh {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-width: 220px;
+      box-shadow: var(--shadow);
+    }
+
+    .refresh strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .refresh span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, minmax(140px, 1fr));
+      gap: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    input, select, textarea {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 44px;
+      padding: 10px 12px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 9px 13px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .tab.active {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .card, .side-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .card {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .card-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: start;
+    }
+
+    h2, h3 {
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    h2 {
+      font-size: 19px;
+    }
+
+    h3 {
+      font-size: 17px;
+    }
+
+    .meta, .small {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 800;
+      background: #eef2f7;
+      color: #344054;
+    }
+
+    .badge.gov {
+      background: #e7f2ff;
+      color: var(--blue);
+    }
+
+    .badge.company {
+      background: #fef4df;
+      color: var(--gold);
+    }
+
+    .badge.global {
+      background: #e8f7f4;
+      color: var(--teal);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 72px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .stat strong {
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .primary, .secondary, .icon-button {
+      border-radius: 8px;
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .primary {
+      border: 0;
+      background: var(--blue);
+      color: white;
+      padding: 0 14px;
+      font-weight: 800;
+    }
+
+    .secondary {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      padding: 0 12px;
+    }
+
+    .icon-button {
+      width: 42px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--muted);
+    }
+
+    .icon-button.saved {
+      background: #fff7ed;
+      color: var(--gold);
+      border-color: #fed7aa;
+    }
+
+    .reviews {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .quote {
+      margin: 0;
+      padding-left: 10px;
+      border-left: 3px solid #cbd5e1;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .side {
+      display: grid;
+      gap: 14px;
+      position: sticky;
+      top: 18px;
+    }
+
+    .side-card {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .match {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .score {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #dcfce7;
+      color: #166534;
+      font-weight: 900;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline div {
+      border-left: 3px solid #cbd5e1;
+      padding-left: 10px;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .premium {
+      border-color: #f6c453;
+      background: #fffbeb;
+    }
+
+    .comment-box {
+      display: grid;
+      gap: 8px;
+    }
+
+    .comments {
+      display: grid;
+      gap: 8px;
+      max-height: 150px;
+      overflow: auto;
+    }
+
+    .comment {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px;
+      font-size: 13px;
+      background: white;
+      line-height: 1.45;
+    }
+
+    .empty {
+      display: none;
+      padding: 28px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: white;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 1060px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      nav {
+        grid-auto-flow: column;
+        overflow-x: auto;
+      }
+
+      .profile {
+        margin-top: 0;
+        margin-left: auto;
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .layout, .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .side {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      main {
+        padding: 18px;
+      }
+
+      .controls, .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .card-head {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        padding: 18px;
+      }
+
+      .profile {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand"><span class="mark">S</span>ScholarCloud</div>
+      <nav aria-label="서비스 메뉴">
+        <button class="active" type="button">⌘ 공고 탐색</button>
+        <button type="button">☆ 찜한 공고</button>
+        <button type="button">▣ 지원 캘린더</button>
+        <button type="button">◌ 프리미엄 보고서</button>
+      </nav>
+      <div class="profile">
+        <strong>BlueCloud 로그인: 김민지</strong>
+        <span>대학생 · 컴퓨터공학 · 해외 교환 관심 · 알림 켜짐</span>
+      </div>
+    </aside>
+
+    <main>
+      <section class="topbar" aria-labelledby="page-title">
+        <div>
+          <h1 id="page-title">내 조건에 맞는 장학금과 해외 유학 지원 공고</h1>
+          <p class="subtitle">마감일, 지원 대상, 정부/기업 구분, 지원 금액, 지원 기간, 후기 기반 경쟁률 신호를 한 화면에서 비교합니다.</p>
+        </div>
+        <div class="refresh" aria-label="데이터 새로고침 상태">
+          <strong>데모 새로고침: 3일마다</strong>
+          <span>실서비스 목표: 1시간마다 수집 · 새 공고 알림</span>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="공고 필터">
+        <div class="field">
+          <label for="search">검색</label>
+          <input id="search" type="search" placeholder="예: 이공계, 교환학생, 대학원, 해외">
+        </div>
+        <div class="field">
+          <label for="source">지원 주체</label>
+          <select id="source">
+            <option value="all">전체</option>
+            <option value="government">정부지원</option>
+            <option value="company">기업/재단지원</option>
+            <option value="global">해외유학</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="deadline">마감</label>
+          <select id="deadline">
+            <option value="all">전체</option>
+            <option value="14">14일 이내</option>
+            <option value="30">30일 이내</option>
+            <option value="60">60일 이내</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="amount">최소 지원금</label>
+          <select id="amount">
+            <option value="0">상관없음</option>
+            <option value="200">200만원 이상</option>
+            <option value="500">500만원 이상</option>
+            <option value="1000">1,000만원 이상</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="tabs" role="tablist" aria-label="지원 대상">
+        <button class="tab active" type="button" data-tab="undergraduate">대학생</button>
+        <button class="tab" type="button" data-tab="graduate">대학원생</button>
+        <button class="tab" type="button" data-tab="all">전체 보기</button>
+      </div>
+
+      <section class="layout">
+        <div>
+          <div class="list" id="scholarship-list" aria-live="polite"></div>
+          <div class="empty" id="empty">조건에 맞는 공고가 없습니다. 필터를 넓혀보세요.</div>
+        </div>
+
+        <aside class="side" aria-label="개인 맞춤 패널">
+          <section class="side-card">
+            <h3>내 프로필 매칭</h3>
+            <div class="match">
+              <div class="score">92</div>
+              <div>
+                <strong>해외 교환 + 이공계 장학 우선</strong>
+                <div class="small">학년, 전공, 관심 국가, 마감 일정이 반영된 데모 점수입니다.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="side-card">
+            <h3>다가오는 일정</h3>
+            <div class="timeline">
+              <div><strong>9월 18일</strong><br>국가우수장학금 서류 마감 1차 알림</div>
+              <div><strong>9월 24일</strong><br>삼성꿈장학재단 추천서 요청 알림</div>
+              <div><strong>10월 12일</strong><br>Fulbright 에세이 초안 점검</div>
+            </div>
+          </section>
+
+          <section class="side-card premium">
+            <h3>프리미엄 통합 보고서</h3>
+            <p class="small">찜한 공고, 성적/활동/일정 정보를 바탕으로 지원 우선순위와 필요한 서류 초안을 생성하는 영역입니다.</p>
+            <button class="primary" type="button" id="report-button">보고서 미리보기</button>
+            <div class="comment" id="report-output">현재 추천: 마감이 빠른 정부지원 1건, 해외유학 1건을 먼저 준비하세요.</div>
+          </section>
+
+          <section class="side-card">
+            <h3>BlueCloud 의견 메모</h3>
+            <div class="comment-box">
+              <textarea id="comment-input" rows="3" placeholder="예: Fulbright는 영어 에세이 먼저 준비"></textarea>
+              <button class="secondary" type="button" id="add-comment">의견 저장</button>
+              <div class="comments" id="comments">
+                <div class="comment">민지: 이공계 장학금은 지도교수 추천서 필요 여부 확인</div>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const scholarships = [
+      {
+        title: "국가우수장학금 이공계 신규장학생",
+        provider: "한국장학재단",
+        audience: "undergraduate",
+        source: "government",
+        daysLeft: 12,
+        amount: 250,
+        amountLabel: "등록금 전액 또는 학기별 250만원",
+        period: "최대 정규학기",
+        competition: "높음 · 이공계 성적/활동 중심",
+        reviews: "선정 후기: 전공 성적, 연구활동, 자기소개서 논리성이 자주 언급됨",
+        url: "https://www.kosaf.go.kr/",
+        tags: ["정부지원", "대학생", "이공계"]
+      },
+      {
+        title: "삼성꿈장학재단 미래인재 장학",
+        provider: "삼성꿈장학재단",
+        audience: "undergraduate",
+        source: "company",
+        daysLeft: 21,
+        amount: 500,
+        amountLabel: "연간 최대 500만원",
+        period: "1년 단위 심사",
+        competition: "중간~높음 · 성장 가능성 중심",
+        reviews: "선정 후기: 가정환경보다 목표의 구체성과 멘토 추천서 설득력이 중요했다는 의견",
+        url: "https://www.sdream.or.kr/",
+        tags: ["기업/재단지원", "대학생", "생활비"]
+      },
+      {
+        title: "Fulbright 한국 대학원 장학 프로그램",
+        provider: "한미교육위원단",
+        audience: "graduate",
+        source: "global",
+        daysLeft: 45,
+        amount: 1000,
+        amountLabel: "학비 일부, 생활비, 항공 등 프로그램별 상이",
+        period: "1~2년",
+        competition: "매우 높음 · 학업계획서/영어면접 중요",
+        reviews: "선정 후기: 연구계획의 공공성, 추천서, 인터뷰 일관성이 핵심으로 언급됨",
+        url: "https://www.fulbright.or.kr/",
+        tags: ["해외유학", "대학원생", "미국"]
+      },
+      {
+        title: "DAAD 독일 유학 장학금",
+        provider: "DAAD Korea",
+        audience: "graduate",
+        source: "global",
+        daysLeft: 58,
+        amount: 1200,
+        amountLabel: "월 생활비와 보험 등 프로그램별 지원",
+        period: "10~24개월",
+        competition: "높음 · 연구계획/독일 연계성 중요",
+        reviews: "선정 후기: 독일 대학 컨택, 연구실 적합성, 언어 준비도가 자주 언급됨",
+        url: "https://www.daad.or.kr/",
+        tags: ["해외유학", "대학원생", "독일"]
+      }
+    ];
+
+    const list = document.querySelector("#scholarship-list");
+    const empty = document.querySelector("#empty");
+    const search = document.querySelector("#search");
+    const source = document.querySelector("#source");
+    const deadline = document.querySelector("#deadline");
+    const amount = document.querySelector("#amount");
+    let activeTab = "undergraduate";
+
+    function sourceLabel(value) {
+      return {
+        government: "정부지원",
+        company: "기업/재단지원",
+        global: "해외유학"
+      }[value];
+    }
+
+    function render() {
+      const term = search.value.trim().toLowerCase();
+      const maxDeadline = deadline.value === "all" ? Infinity : Number(deadline.value);
+      const minAmount = Number(amount.value);
+      const filtered = scholarships.filter((item) => {
+        const tabMatch = activeTab === "all" || item.audience === activeTab;
+        const sourceMatch = source.value === "all" || item.source === source.value;
+        const deadlineMatch = item.daysLeft <= maxDeadline;
+        const amountMatch = item.amount >= minAmount;
+        const text = [item.title, item.provider, item.amountLabel, item.period, item.competition, item.reviews, ...item.tags].join(" ").toLowerCase();
+        return tabMatch && sourceMatch && deadlineMatch && amountMatch && text.includes(term);
+      });
+
+      list.innerHTML = filtered.map((item) => `
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>${item.title}</h2>
+              <div class="meta">${item.provider} · 마감 D-${item.daysLeft}</div>
+            </div>
+            <button class="icon-button save" type="button" aria-label="${item.title} 찜하기" title="찜하기">☆</button>
+          </div>
+          <div class="badges">
+            <span class="badge ${item.source}">${sourceLabel(item.source)}</span>
+            ${item.tags.map((tag) => `<span class="badge">${tag}</span>`).join("")}
+          </div>
+          <div class="stats">
+            <div class="stat"><span>마감지원일</span><strong>D-${item.daysLeft}</strong></div>
+            <div class="stat"><span>지원 비용</span><strong>${item.amountLabel}</strong></div>
+            <div class="stat"><span>지원 기간</span><strong>${item.period}</strong></div>
+            <div class="stat"><span>경쟁률 신호</span><strong>${item.competition}</strong></div>
+          </div>
+          <div class="reviews">
+            <p class="quote">${item.reviews}</p>
+          </div>
+          <div class="actions">
+            <a class="primary" href="${item.url}" target="_blank" rel="noreferrer">원문 바로가기 ↗</a>
+            <button class="secondary" type="button">내 일정에 추가</button>
+            <button class="secondary" type="button">댓글로 질문</button>
+          </div>
+        </article>
+      `).join("");
+
+      empty.style.display = filtered.length ? "none" : "block";
+
+      document.querySelectorAll(".save").forEach((button) => {
+        button.addEventListener("click", () => {
+          button.classList.toggle("saved");
+          button.textContent = button.classList.contains("saved") ? "★" : "☆";
+        });
+      });
+    }
+
+    document.querySelectorAll(".tab").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
+        button.classList.add("active");
+        activeTab = button.dataset.tab;
+        render();
+      });
+    });
+
+    [search, source, deadline, amount].forEach((control) => control.addEventListener("input", render));
+
+    document.querySelector("#add-comment").addEventListener("click", () => {
+      const input = document.querySelector("#comment-input");
+      const text = input.value.trim();
+      if (!text) return;
+      const node = document.createElement("div");
+      node.className = "comment";
+      node.textContent = `민지: ${text}`;
+      document.querySelector("#comments").prepend(node);
+      input.value = "";
+    });
+
+    document.querySelector("#report-button").addEventListener("click", () => {
+      document.querySelector("#report-output").textContent = "통합 보고서: 국가우수장학금은 즉시 서류 준비, Fulbright는 에세이와 추천서 타임라인을 4주 단위로 나누는 전략이 적합합니다.";
+    });
+
+    render();
+  </script>
+</body>
+</html>

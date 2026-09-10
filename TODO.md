@@ -11,3 +11,9 @@
 - [ ] Add premium report generation from the user's saved profile, schedule, activities, grades, and target countries.
 - [ ] Store reviews/spec summaries with citations and moderation.
 
+
+## 2026-09-10 public deployment feedback
+
+- [x] User requested real public deployment through GitHub or another suitable route.
+- [x] GitHub connector install failed, so use local authenticated GitHub CLI instead.
+- [x] Publish repository as public GitHub repo and configure GitHub Pages from /docs.
