@@ -718,7 +718,22 @@
     .catalog-count { color: var(--muted); font-size: 12px; }
     @media(max-width:760px){ .catalog-tools{grid-template-columns:1fr} }
 
+
+
+    /* 2026-09-14 real user home browse modes */
+    .browse-modes { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 16px; box-shadow: var(--shadow); display: grid; gap: 12px; }
+    .browse-mode-tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .browse-mode-tabs::-webkit-scrollbar { display: none; }
+    .browse-mode { flex: 0 0 auto; border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 999px; padding: 10px 14px; font-weight: 900; cursor: pointer; }
+    .browse-mode.active { background: #111827; color: #fff; border-color: #111827; }
+    .browse-results { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+    .browse-card { border: 1px solid var(--line); background: #fbfdff; border-radius: 18px; padding: 12px; display: grid; gap: 6px; min-height: 112px; }
+    .browse-card strong { line-height: 1.3; }
+    .browse-card span { color: var(--muted); font-size: 12px; }
+    @media(max-width:760px){ .browse-results{grid-template-columns:1fr}.browse-modes{border-radius:24px} }
+
   </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <div class="app">
@@ -731,8 +746,8 @@
         <button type="button">◌ 프리미엄 보고서</button>
       </nav>
       <div class="profile">
-        <strong>BlueCloud 로그인: 김민지</strong>
-        <span>대학생 · 컴퓨터공학 · 해외 교환 관심 · 알림 켜짐</span>
+        <strong id="sidebar-user">BlueCloud 로그인 전</strong>
+        <span id="sidebar-profile">내 학교·지역·전공 기준으로 장학금을 설정하세요</span>
       </div>
     </aside>
 
@@ -767,6 +782,21 @@
         <button id="refresh-data" type="button">↻ 최신 정보 가져오기</button>
         <a class="google-link" id="google-search" target="_blank" rel="noopener">Google에서 공고 찾기 ↗</a>
         <span class="live-status" id="live-status">초기 데이터 로딩 중…</span>
+      </section>
+
+
+      <section class="browse-modes" aria-label="홈 탐색 옵션">
+        <div class="home-card-title">
+          <h3>홈 탐색 옵션</h3>
+          <span class="small">원하는 기준으로 빠르게 보기</span>
+        </div>
+        <div class="browse-mode-tabs" role="tablist" aria-label="공고 보기 방식">
+          <button class="browse-mode active" type="button" data-mode="recent">최근별로 보기</button>
+          <button class="browse-mode" type="button" data-mode="region">지역별로 보기</button>
+          <button class="browse-mode" type="button" data-mode="major">전공/전문 과목별 보기</button>
+          <button class="browse-mode" type="button" data-mode="school">내 대학교별 보기</button>
+        </div>
+        <div class="browse-results" id="browse-results"></div>
       </section>
 
       <section class="home-grid" aria-label="홈 요약">
@@ -964,7 +994,7 @@
               <textarea id="comment-input" rows="3" placeholder="예: Fulbright는 영어 에세이 먼저 준비"></textarea>
               <button class="secondary" type="button" id="add-comment">의견 저장</button>
               <div class="comments" id="comments">
-                <div class="comment">민지: 이공계 장학금은 지도교수 추천서 필요 여부 확인</div>
+                <div class="comment">나: 관심 공고에 대해 메모를 남길 수 있습니다</div>
               </div>
             </div>
           </section>
@@ -1187,7 +1217,7 @@
     }
 
     function renderHome() {
-      const recent = [...scholarships].sort((a, b) => {
+      const recent = [...scholarships].map(normalise).sort((a, b) => {
         const schoolBoostA = profile.school && a.school === profile.school ? -1000 : 0;
         const schoolBoostB = profile.school && b.school === profile.school ? -1000 : 0;
         return (a.daysLeft + schoolBoostA) - (b.daysLeft + schoolBoostB);
@@ -1230,6 +1260,7 @@
         if (remember) sessionStorage.removeItem("scholarcloud-auth"); else localStorage.removeItem("scholarcloud-auth");
         status.textContent = `BlueCloud 로그인 유지: ${username}`;
         if (chip) chip.textContent = "로그인 유지 중";
+        document.querySelector("#sidebar-user").textContent = `BlueCloud: ${username}`;
         renderHome();
         openOnboarding();
         return true;
@@ -1304,6 +1335,69 @@
     }
 
 
+
+
+
+
+
+    async function startGoogleSignup() {
+      const status = document.querySelector("#account-status");
+      const chip = document.querySelector("#login-chip");
+      try {
+        status.textContent = "Google 로그인 준비 중…";
+        const clientRes = await fetch(`${BLUECLOUD_API}/auth/google-client-id?platform=web`, { cache: "no-store" });
+        const clientData = await clientRes.json();
+        if (!clientData.clientId || !window.google?.accounts?.id) throw new Error("Google 로그인 설정을 불러오지 못했습니다.");
+        google.accounts.id.initialize({
+          client_id: clientData.clientId,
+          callback: async (credentialResponse) => {
+            try {
+              const response = await fetch(`${BLUECLOUD_API}/auth/google`, { method: "POST", headers: { "content-type": "application/json", "x-cloud-app": "scholarshipcloud" }, body: JSON.stringify({ idToken: credentialResponse.credential }) });
+              const data = await response.json().catch(() => ({}));
+              if (!response.ok || !data.token) throw new Error(data.error || data.message || "Google BlueCloud 로그인 실패");
+              const username = data.user?.email || data.email || "Google 사용자";
+              localStorage.setItem("scholarcloud-auth", JSON.stringify({ username, provider: "google", token: data.token, remember: true, loginAt: new Date().toISOString() }));
+              status.textContent = `BlueCloud 로그인 유지: ${username}`;
+              document.querySelector("#sidebar-user").textContent = `BlueCloud: ${username}`;
+              if (chip) chip.textContent = "Google 로그인 유지 중";
+              openOnboarding(true);
+            } catch (error) { status.textContent = error.message; }
+          }
+        });
+        google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed?.() || notification.isSkippedMoment?.()) {
+            status.textContent = "Google 팝업이 차단되면 브라우저에서 팝업/서드파티 로그인을 허용해주세요.";
+          }
+        });
+      } catch (error) {
+        status.textContent = error.message;
+        if (chip) chip.textContent = "Google 로그인 설정 필요";
+      }
+    }
+
+    let activeBrowseMode = localStorage.getItem("scholarcloud-browse-mode") || "recent";
+    function itemRegion(item) { return item.region || (item.tags || []).find((tag) => /서울|세종|대전|부산|충청|경기|인천|광주|대구|울산|전북|전남|경북|경남|강원|제주/.test(tag)) || "전국"; }
+    function itemMajor(item) { return (item.tags || []).find((tag) => /이공계|공학|예술|디자인|인문|사회|경영|의학|간호|교육|해외|외국인|창업|근로/.test(tag)) || "공통"; }
+    function renderBrowseModes() {
+      document.querySelectorAll(".browse-mode").forEach((btn) => btn.classList.toggle("active", btn.dataset.mode === activeBrowseMode));
+      const box = document.querySelector("#browse-results");
+      if (!box) return;
+      let rows = [];
+      if (activeBrowseMode === "recent") {
+        rows = [...scholarships].map(normalise).sort((a,b)=>a.daysLeft-b.daysLeft).slice(0,6).map((item)=>({title:item.title, meta:`${item.provider} · D-${item.daysLeft}`, sub:item.amountLabel}));
+      } else if (activeBrowseMode === "region") {
+        const groups = {};
+        scholarships.forEach((item)=>{ const key=itemRegion(item); groups[key]=(groups[key]||0)+1; });
+        rows = Object.entries(groups).sort((a,b)=>b[1]-a[1]).map(([title,count])=>({title, meta:`${count}개 공고`, sub:"지역 장학금과 통학 가능 공고를 함께 확인"}));
+      } else if (activeBrowseMode === "major") {
+        const groups = {};
+        scholarships.forEach((item)=>{ const key=itemMajor(item); groups[key]=(groups[key]||0)+1; });
+        rows = Object.entries(groups).sort((a,b)=>b[1]-a[1]).map(([title,count])=>({title, meta:`${count}개 공고`, sub:"전공/전문 과목 기반 추천"}));
+      } else {
+        rows = scholarships.filter((item)=>!profile.school || item.school === profile.school || item.source !== "university").slice(0,6).map((item)=>({title:item.title, meta:`${item.provider} · ${sourceLabel(item.source)}`, sub:item.region || "전국"}));
+      }
+      box.innerHTML = rows.slice(0,6).map((row)=>`<article class="browse-card"><strong>${row.title}</strong><span>${row.meta}</span><span>${row.sub}</span></article>`).join("");
+    }
 
     let universityCatalog = [];
     async function loadUniversityCatalog() {
@@ -1473,6 +1567,7 @@
       document.querySelectorAll(".school-chip").forEach((chip) => chip.classList.toggle("active", chip.dataset.school === (profile.school || "")));
       const auth = JSON.parse(localStorage.getItem("scholarcloud-auth") || sessionStorage.getItem("scholarcloud-auth") || "null");
       document.querySelector("#account-status").textContent = auth?.username ? `BlueCloud 로그인 유지: ${auth.username}` : "로그인하지 않은 로컬 프로필";
+      document.querySelector("#sidebar-user").textContent = auth?.username ? `BlueCloud: ${auth.username}` : "BlueCloud 로그인 전";
       document.querySelector("#login-chip").textContent = auth?.username ? "로그인 유지 중" : "로그인 유지 가능";
       renderHome();
     }
@@ -1494,6 +1589,8 @@
       document.querySelectorAll(".school-chip").forEach((chip) => chip.classList.toggle("active", chip.dataset.school === value));
       render();
       renderHome();
+      renderBrowseModes();
+      renderBrowseModes();
       renderUniversitySetup();
     }
     document.querySelector("#profile-school").addEventListener("change", (event) => syncSchoolChoice(event.target.value));
@@ -1524,9 +1621,16 @@
     document.querySelector("#ai-send").addEventListener("click", () => submitOnboardingAnswer(document.querySelector("#ai-answer").value));
     document.querySelector("#ai-answer").addEventListener("keydown", (event) => { if (event.key === "Enter") submitOnboardingAnswer(event.target.value); });
     document.querySelector("#ai-suggestions").addEventListener("click", (event) => { const chip = event.target.closest(".ai-suggestion"); if (chip) submitOnboardingAnswer(chip.textContent); });
-    document.querySelector("#google-signup").addEventListener("click", () => { localStorage.setItem("scholarcloud-auth", JSON.stringify({ username: "google-user", provider: "google", remember: true, loginAt: new Date().toISOString() })); document.querySelector("#account-status").textContent = "Google BlueCloud 가입 흐름 준비됨"; document.querySelector("#login-chip").textContent = "Google 가입 후 AI 등록"; openOnboarding(true); });
+    document.querySelector("#google-signup").addEventListener("click", startGoogleSignup);
     document.querySelector("#apply-onboarding").addEventListener("click", () => { localStorage.setItem("scholarcloud-registration-complete", "true"); document.querySelector("#account-status").textContent = "BlueCloud 등록 완료: AI 수집 프로필 기준"; alert("BlueCloud 등록 기준이 저장되었습니다. 이제 학교/지역/특별조건 기반 장학금이 우선 표시됩니다."); });
 
+
+
+    document.querySelectorAll(".browse-mode").forEach((button) => button.addEventListener("click", () => {
+      activeBrowseMode = button.dataset.mode;
+      localStorage.setItem("scholarcloud-browse-mode", activeBrowseMode);
+      renderBrowseModes();
+    }));
 
     document.querySelector("#language-select").addEventListener("change", (event) => { currentLang = event.target.value; localStorage.setItem("scholarcloud-language", currentLang); applyLanguage(); });
     document.querySelector("#setup-university").addEventListener("click", () => setupUniversityScholarships(false));
@@ -1557,7 +1661,7 @@
       if (!text) return;
       const node = document.createElement("div");
       node.className = "comment";
-      node.textContent = `민지: ${text}`;
+      node.textContent = `나: ${text}`;
       document.querySelector("#comments").prepend(node);
       input.value = "";
     });
@@ -1568,6 +1672,7 @@
 
     render();
     renderHome();
+    renderBrowseModes();
     loadProfile();
     refreshData();
     applyLanguage();
