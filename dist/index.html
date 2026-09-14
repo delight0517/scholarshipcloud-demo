@@ -819,6 +819,30 @@
     .seo-keywords { display: flex; flex-wrap: wrap; gap: 8px; }
     .seo-keywords span { border-radius: 999px; background: #eef2ff; color: #3730a3; padding: 7px 10px; font-size: 12px; font-weight: 800; }
 
+
+
+    /* 2026-09-14 notice-first redesign: make the service clear before AI/account features */
+    .topbar.notice-first-hero { background: #fff; border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); padding: 26px; }
+    .service-kicker { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border-radius:999px; background:#eef2ff; color:#3730a3; font-size:12px; font-weight:900; margin-bottom:12px; }
+    .hero-search { margin-top:18px; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; max-width:720px; }
+    .hero-search input { min-height:54px; border-radius:18px; font-size:16px; }
+    .hero-search button { border-radius:18px; padding:0 18px; }
+    .hero-stats { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .hero-stat { border:1px solid var(--line); background:#f8fafc; border-radius:14px; padding:9px 11px; color:#475467; font-size:13px; font-weight:800; }
+    .flow-hub { position: static; background: transparent; border:0; box-shadow:none; padding:0; }
+    .flow-hub-head { display:none; }
+    .flow-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; }
+    .flow-action { min-height:42px; border-radius:999px; padding:8px 13px; display:inline-flex; width:auto; font-size:13px; background:#fff; }
+    .flow-action span { display:none; }
+    .flow-action.primary-action { background:#111827; }
+    .auth-soft { opacity:.82; }
+    .browse-modes { order: 1; }
+    .home-grid { order: 2; }
+    .subscription-card { order: 8; }
+    .notice-list-priority { border:2px solid #dbeafe; }
+    main { align-content:start; }
+    @media(max-width:760px){ .topbar.notice-first-hero{padding:20px;border-radius:24px}.hero-search{grid-template-columns:1fr}.flow-actions{justify-content:flex-start}.flow-action{flex:1 1 auto}.flow-action.primary-action{flex-basis:100%} }
+
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -854,10 +878,13 @@
     </aside>
 
     <main>
-      <section class="topbar" aria-labelledby="page-title">
+      <section class="topbar notice-first-hero" aria-labelledby="page-title">
         <div>
-          <h1 id="page-title">내 학교·지역·전공에 맞는 장학금 찾기</h1>
-          <p class="subtitle">마감일, 지원 대상, 정부/기업 구분, 지원 금액, 지원 기간, 후기 기반 경쟁률 신호를 한 화면에서 비교합니다.</p>
+          <div class="service-kicker">대학생·대학원생 장학금 공고 모음</div>
+          <h1 id="page-title">지금 신청할 수 있는 장학금을 한곳에서 찾기</h1>
+          <p class="subtitle">학교별, 지역별, 전공별 장학금 공고를 빠르게 비교하세요. 로그인은 저장과 맞춤 추천이 필요할 때만 사용하면 됩니다.</p>
+          <div class="hero-search"><input id="hero-search" type="search" placeholder="장학금, 학교, 지역, 전공으로 검색"><button class="primary" id="hero-search-button" type="button">공고 검색</button></div>
+          <div class="hero-stats"><span class="hero-stat" id="hero-total-count">공고 로딩 중</span><span class="hero-stat" id="hero-school-count">학교별 공고</span><span class="hero-stat" id="hero-soon-count">마감 임박</span></div>
         </div>
         <div class="refresh" aria-label="데이터 새로고침 상태">
           <strong id="refresh-title">실시간 데이터 준비 중</strong>
@@ -881,17 +908,17 @@
       <section class="flow-hub" aria-label="빠른 시작 허브">
         <div class="flow-hub-head">
           <div class="flow-hub-title">
-            <strong>내 장학금 빠른 시작</strong>
+            <strong>빠른 메뉴</strong>
             <span class="small" id="flow-login-state">로그인하면 학교·지역·전공 기준으로 바로 정리됩니다.</span>
           </div>
           <span class="badge university">상단에서 바로 이동</span>
         </div>
         <div class="flow-actions">
-          <button class="flow-action primary-action" id="flow-google" type="button">Google로 시작<span>AI 등록 상담</span></button>
-          <button class="flow-action" id="flow-login" type="button">BlueCloud 로그인<span>기존 계정</span></button>
-          <button class="flow-action" data-scroll-target="browse-modes" type="button">공고 탐색<span>최근·지역·전공</span></button>
-          <button class="flow-action" data-scroll-target="subscription-autoapply" type="button">Plus 결제<span>월 20,000원</span></button>
-          <button class="flow-action" id="flow-profile" type="button">내 정보 수정<span>학교/조건</span></button>
+          <button class="flow-action primary-action" id="flow-google" type="button">로그인</button>
+          <button class="flow-action" id="flow-login" type="button">계정</button>
+          <button class="flow-action" data-scroll-target="browse-modes" type="button">공고 보기</button>
+          <button class="flow-action" data-scroll-target="subscription-autoapply" type="button">Plus</button>
+          <button class="flow-action" id="flow-profile" type="button">내 조건</button>
         </div>
       </section>
 
@@ -949,7 +976,7 @@
         </div>
         <div class="home-card login-hero" id="easy-login">
           <div class="home-card-title"><h3>로그인하고 내 장학금 보기</h3><span class="small" id="login-chip">로그인 유지 가능</span></div>
-          <p class="profile-note">한 번 로그인하면 다음 방문부터 내 학교·지역·전공 기준으로 바로 이어볼 수 있습니다.</p>
+          <p class="profile-note">로그인하면 관심 공고 저장, 학교별 맞춤 추천, 마감 알림을 이어서 볼 수 있습니다.</p>
           <div class="login-form">
             <input id="home-quick-username" autocomplete="username" placeholder="BlueCloud 아이디">
             <input id="home-quick-password" type="password" autocomplete="current-password" placeholder="비밀번호">
@@ -1608,6 +1635,17 @@
     let activeBrowseMode = localStorage.getItem("scholarcloud-browse-mode") || "recent";
     function itemRegion(item) { return item.region || (item.tags || []).find((tag) => /서울|세종|대전|부산|충청|경기|인천|광주|대구|울산|전북|전남|경북|경남|강원|제주/.test(tag)) || "전국"; }
     function itemMajor(item) { return (item.tags || []).find((tag) => /이공계|공학|예술|디자인|인문|사회|경영|의학|간호|교육|해외|외국인|창업|근로/.test(tag)) || "공통"; }
+
+
+    function updateHeroCounts() {
+      const total = scholarships.length;
+      const school = scholarships.filter((item)=>item.source === "university").length;
+      const soon = scholarships.map(normalise).filter((item)=>item.daysLeft <= 21).length;
+      document.querySelector("#hero-total-count").textContent = `${total}개 공고`;
+      document.querySelector("#hero-school-count").textContent = `학교별 ${school}개`;
+      document.querySelector("#hero-soon-count").textContent = `21일 이내 ${soon}개`;
+    }
+
     function renderBrowseModes() {
       document.querySelectorAll(".browse-mode").forEach((btn) => btn.classList.toggle("active", btn.dataset.mode === activeBrowseMode));
       const box = document.querySelector("#browse-results");
@@ -1860,6 +1898,7 @@
       activeBrowseMode = button.dataset.mode;
       localStorage.setItem("scholarcloud-browse-mode", activeBrowseMode);
       renderBrowseModes();
+      updateHeroCounts();
     }));
 
 
@@ -1910,6 +1949,7 @@
     render();
     renderHome();
     renderBrowseModes();
+    updateHeroCounts();
     loadProfile();
     refreshData();
     applyLanguage();
