@@ -1,0 +1,1419 @@
+{
+  "source": "Wikidata SPARQL CC0 + manual priority campuses",
+  "count": 157,
+  "items": [
+    {
+      "id": "hongik_sejong",
+      "nameKo": "홍익대학교 세종캠퍼스",
+      "nameEn": "Hongik University Sejong Campus",
+      "region": "세종",
+      "type": "university",
+      "website": "https://sejong.hongik.ac.kr/",
+      "source": "manual-priority"
+    },
+    {
+      "id": "korea_sejong",
+      "nameKo": "고려대학교 세종캠퍼스",
+      "nameEn": "Korea University Sejong Campus",
+      "region": "세종",
+      "type": "university",
+      "website": "https://sejong.korea.ac.kr/",
+      "source": "manual-priority"
+    },
+    {
+      "id": "busan_asian_film_school",
+      "nameKo": "Busan Asian Film School",
+      "nameEn": "Busan Asian Film School",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "endicott_college_of_international_studies",
+      "nameKo": "Endicott College of International Studies",
+      "nameEn": "Endicott College of International Studies",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "graduate_school_of_design_ewha_womans_university",
+      "nameKo": "Graduate School of Design, Ewha Womans University",
+      "nameEn": "Graduate School of Design, Ewha Womans University",
+      "region": "서울특별시",
+      "type": "graduate_school",
+      "website": "http://gsd.ewha.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "institute_of_information_technology_advancement",
+      "nameKo": "Institute of Information Technology Advancement",
+      "nameEn": "Institute of Information Technology Advancement",
+      "region": "대전광역시",
+      "type": "university",
+      "website": "http://www.iita.re.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "keisie_graduate_school_of_international_education",
+      "nameKo": "KEISIE Graduate School of International Education",
+      "nameEn": "KEISIE Graduate School of International Education",
+      "region": "춘천시",
+      "type": "graduate_school",
+      "website": "http://www.koredinco.com",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "korea_university_division_of_international_studies",
+      "nameKo": "Korea University Division of International Studies",
+      "nameEn": "Korea University Division of International Studies",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://dis.korea.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "korea_university_graduate_school_of_international_studies",
+      "nameKo": "Korea University Graduate School of International Studies",
+      "nameEn": "Korea University Graduate School of International Studies",
+      "region": "서울특별시",
+      "type": "graduate_school",
+      "website": "http://gsis.korea.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "kyonggi_university_graduate_school_of_political_studies",
+      "nameKo": "Kyonggi University Graduate School of Political Studies",
+      "nameEn": "Kyonggi University Graduate School of Political Studies",
+      "region": "",
+      "type": "graduate_school",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "linton_school_of_global_business",
+      "nameKo": "Linton School of Global Business",
+      "nameEn": "Linton School of Global Business",
+      "region": "대전광역시",
+      "type": "university",
+      "website": "http://lintonschool.hnu.ac.kr/eng/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "ship_and_offshore_structural_mechanics_laboratory",
+      "nameKo": "Ship and Offshore Structural Mechanics Laboratory",
+      "nameEn": "Ship and Offshore Structural Mechanics Laboratory",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://alps.ac",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "sol_international_school",
+      "nameKo": "Sol International School",
+      "nameEn": "Sol International School",
+      "region": "",
+      "type": "university",
+      "website": "https://sis.wsu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "yonsei_institute_of_convergence_technology",
+      "nameKo": "Yonsei Institute of Convergence Technology",
+      "nameEn": "Yonsei Institute of Convergence Technology",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "강남대학교",
+      "nameKo": "강남대학교",
+      "nameEn": "강남대학교",
+      "region": "용인시",
+      "type": "university",
+      "website": "http://www.kangnam.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "강동대학교",
+      "nameKo": "강동대학교",
+      "nameEn": "강동대학교",
+      "region": "음성군",
+      "type": "university",
+      "website": "http://www.gangdong.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "강릉원주대학교_공과대학",
+      "nameKo": "강릉원주대학교 공과대학",
+      "nameEn": "강릉원주대학교 공과대학",
+      "region": "강릉시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "강릉원주대학교_과학기술대학",
+      "nameKo": "강릉원주대학교 과학기술대학",
+      "nameEn": "강릉원주대학교 과학기술대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "강릉원주대학교_사회과학대학",
+      "nameKo": "강릉원주대학교 사회과학대학",
+      "nameEn": "강릉원주대학교 사회과학대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "강릉원주대학교_예술체육대학",
+      "nameKo": "강릉원주대학교 예술체육대학",
+      "nameEn": "강릉원주대학교 예술체육대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "강릉원주대학교_인문대학",
+      "nameKo": "강릉원주대학교 인문대학",
+      "nameEn": "강릉원주대학교 인문대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "강릉원주대학교_자연과학대학",
+      "nameKo": "강릉원주대학교 자연과학대학",
+      "nameEn": "강릉원주대학교 자연과학대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "건동대학교",
+      "nameKo": "건동대학교",
+      "nameEn": "건동대학교",
+      "region": "안동시",
+      "type": "university",
+      "website": "http://www.kundong.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "건신대학원대학교",
+      "nameKo": "건신대학원대학교",
+      "nameEn": "건신대학원대학교",
+      "region": "대전광역시",
+      "type": "graduate_school",
+      "website": "http://www.alu.ac.kr/index.html",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경기대학교",
+      "nameKo": "경기대학교",
+      "nameEn": "경기대학교",
+      "region": "영통구",
+      "type": "university",
+      "website": "http://www.kyonggi.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경남과학기술대학교",
+      "nameKo": "경남과학기술대학교",
+      "nameEn": "경남과학기술대학교",
+      "region": "진주시",
+      "type": "university",
+      "website": "http://www.gntech.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경북대학교",
+      "nameKo": "경북대학교",
+      "nameEn": "경북대학교",
+      "region": "대구광역시",
+      "type": "university",
+      "website": "http://www.knu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경북대학교_자연과학대학",
+      "nameKo": "경북대학교 자연과학대학",
+      "nameEn": "경북대학교 자연과학대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경성대학교",
+      "nameKo": "경성대학교",
+      "nameEn": "경성대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://ks.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경원대학교",
+      "nameKo": "경원대학교",
+      "nameEn": "경원대학교",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경인교육대학교",
+      "nameKo": "경인교육대학교",
+      "nameEn": "경인교육대학교",
+      "region": "인천광역시",
+      "type": "university",
+      "website": "http://www.ginue.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경찰대학",
+      "nameKo": "경찰대학",
+      "nameEn": "경찰대학",
+      "region": "용인시",
+      "type": "university",
+      "website": "https://www.police.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "경희사이버대학교",
+      "nameKo": "경희사이버대학교",
+      "nameEn": "경희사이버대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "계원예술대학교",
+      "nameKo": "계원예술대학교",
+      "nameEn": "계원예술대학교",
+      "region": "",
+      "type": "university",
+      "website": "http://www.kaywon.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "고려대학교_공과대학",
+      "nameKo": "고려대학교 공과대학",
+      "nameEn": "고려대학교 공과대학",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://eng1.korea.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "고려대학교_대학원",
+      "nameKo": "고려대학교 대학원",
+      "nameEn": "고려대학교 대학원",
+      "region": "서울특별시",
+      "type": "graduate_school",
+      "website": "http://graduate2.korea.ac.kr/main/main.jsp",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "고려대학교_법학전문대학원",
+      "nameKo": "고려대학교 법학전문대학원",
+      "nameEn": "고려대학교 법학전문대학원",
+      "region": "서울특별시",
+      "type": "graduate_school",
+      "website": "http://www.korealawschool.com/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "고려대학교_사범대학",
+      "nameKo": "고려대학교 사범대학",
+      "nameEn": "고려대학교 사범대학",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://educa.korea.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "고려대학교_생명과학대학",
+      "nameKo": "고려대학교 생명과학대학",
+      "nameEn": "고려대학교 생명과학대학",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://lifesci.korea.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "고려대학교_세종캠퍼스",
+      "nameKo": "고려대학교 세종캠퍼스",
+      "nameEn": "고려대학교 세종캠퍼스",
+      "region": "세종특별자치시",
+      "type": "university",
+      "website": "https://sejong.korea.ac.kr/chi",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "고려대학교_정경대학",
+      "nameKo": "고려대학교 정경대학",
+      "nameEn": "고려대학교 정경대학",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://hoan.korea.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "고려사이버대학교",
+      "nameKo": "고려사이버대학교",
+      "nameEn": "고려사이버대학교",
+      "region": "",
+      "type": "university",
+      "website": "http://www.cuk.edu/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "공주문화대학",
+      "nameKo": "공주문화대학",
+      "nameEn": "공주문화대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "과학기술연합대학원대학교",
+      "nameKo": "과학기술연합대학원대학교",
+      "nameEn": "과학기술연합대학원대학교",
+      "region": "유성구",
+      "type": "graduate_school",
+      "website": "http://www.ust.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "광신대학교",
+      "nameKo": "광신대학교",
+      "nameEn": "광신대학교",
+      "region": "광주시",
+      "type": "university",
+      "website": "http://www.kwangshin.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "광주가톨릭대학교",
+      "nameKo": "광주가톨릭대학교",
+      "nameEn": "광주가톨릭대학교",
+      "region": "나주시",
+      "type": "university",
+      "website": "http://www.gjcatholic.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "광주교육대학교",
+      "nameKo": "광주교육대학교",
+      "nameEn": "광주교육대학교",
+      "region": "광주광역시",
+      "type": "university",
+      "website": "http://eng.gnue.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "광주대학교",
+      "nameKo": "광주대학교",
+      "nameEn": "광주대학교",
+      "region": "광주광역시",
+      "type": "university",
+      "website": "http://www.gwangju.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국립경국대학교",
+      "nameKo": "국립경국대학교",
+      "nameEn": "국립경국대학교",
+      "region": "안동시",
+      "type": "university",
+      "website": "http://www.andong.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국립군산대학교",
+      "nameKo": "국립군산대학교",
+      "nameEn": "국립군산대학교",
+      "region": "군산시",
+      "type": "university",
+      "website": "http://www.kunsan.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국립목포대학교",
+      "nameKo": "국립목포대학교",
+      "nameEn": "국립목포대학교",
+      "region": "목포시",
+      "type": "university",
+      "website": "http://www.mokpo.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국립목포해양대학교",
+      "nameKo": "국립목포해양대학교",
+      "nameEn": "국립목포해양대학교",
+      "region": "목포시",
+      "type": "university",
+      "website": "http://www.mmu.ac.kr/g1/Default.aspx",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국립순천대학교",
+      "nameKo": "국립순천대학교",
+      "nameEn": "국립순천대학교",
+      "region": "순천시",
+      "type": "university",
+      "website": "http://www.sunchon.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국립창원대학교",
+      "nameKo": "국립창원대학교",
+      "nameEn": "국립창원대학교",
+      "region": "창원시",
+      "type": "university",
+      "website": "http://www.changwon.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국립한국교통대학교",
+      "nameKo": "국립한국교통대학교",
+      "nameEn": "국립한국교통대학교",
+      "region": "의왕시",
+      "type": "university",
+      "website": "http://www.ut.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국립한밭대학교",
+      "nameKo": "국립한밭대학교",
+      "nameEn": "국립한밭대학교",
+      "region": "대전광역시",
+      "type": "university",
+      "website": "http://www.hanbat.ac.kr/html/en/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국제법률경영대학원대학교",
+      "nameKo": "국제법률경영대학원대학교",
+      "nameEn": "국제법률경영대학원대학교",
+      "region": "고양시",
+      "type": "graduate_school",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "국제사이버대학교",
+      "nameKo": "국제사이버대학교",
+      "nameEn": "국제사이버대학교",
+      "region": "수원시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "금강대학교",
+      "nameKo": "금강대학교",
+      "nameEn": "금강대학교",
+      "region": "논산시",
+      "type": "university",
+      "website": "http://www.ggu.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "김해대학교",
+      "nameKo": "김해대학교",
+      "nameEn": "김해대학교",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "나사렛대학교",
+      "nameKo": "나사렛대학교",
+      "nameEn": "나사렛대학교",
+      "region": "천안시",
+      "type": "university",
+      "website": "https://www.kornu.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "대구공업대학교",
+      "nameKo": "대구공업대학교",
+      "nameEn": "대구공업대학교",
+      "region": "대구광역시",
+      "type": "university",
+      "website": "https://www.funttc.com/contents/main/main.aspx",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "대구교육대학교",
+      "nameKo": "대구교육대학교",
+      "nameEn": "대구교육대학교",
+      "region": "남구",
+      "type": "university",
+      "website": "http://www.dnue.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "대구대학교",
+      "nameKo": "대구대학교",
+      "nameEn": "대구대학교",
+      "region": "경상북도",
+      "type": "university",
+      "website": "http://daegu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "대구미래대학교",
+      "nameKo": "대구미래대학교",
+      "nameEn": "대구미래대학교",
+      "region": "경산",
+      "type": "university",
+      "website": "http://www.dfc.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "대구예술대학교",
+      "nameKo": "대구예술대학교",
+      "nameEn": "대구예술대학교",
+      "region": "경상북도",
+      "type": "university",
+      "website": "http://www.dgau.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "대구한의대학교",
+      "nameKo": "대구한의대학교",
+      "nameEn": "대구한의대학교",
+      "region": "대구광역시",
+      "type": "university",
+      "website": "http://www.dhu.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "대전대학교",
+      "nameKo": "대전대학교",
+      "nameEn": "대전대학교",
+      "region": "용운동",
+      "type": "university",
+      "website": "http://www.dju.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "대한민국의_사범대학",
+      "nameKo": "대한민국의 사범대학",
+      "nameEn": "대한민국의 사범대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "동서대학교",
+      "nameKo": "동서대학교",
+      "nameEn": "동서대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://uni.dongseo.ac.kr/eng/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "동신대학교",
+      "nameKo": "동신대학교",
+      "nameEn": "동신대학교",
+      "region": "나주시",
+      "type": "university",
+      "website": "http://www.dsu.ac.kr/cms/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "동아보건대학교",
+      "nameKo": "동아보건대학교",
+      "nameEn": "동아보건대학교",
+      "region": "",
+      "type": "university",
+      "website": "http://www.dongac.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "동양대학교",
+      "nameKo": "동양대학교",
+      "nameEn": "동양대학교",
+      "region": "영주시",
+      "type": "university",
+      "website": "http://www.dyu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "동양미래대학교",
+      "nameKo": "동양미래대학교",
+      "nameEn": "동양미래대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "동원대학교",
+      "nameKo": "동원대학교",
+      "nameEn": "동원대학교",
+      "region": "광주시",
+      "type": "university",
+      "website": "http://www.tw.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "동주대학교",
+      "nameKo": "동주대학교",
+      "nameEn": "동주대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://www.dongju.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "명지전문대학",
+      "nameKo": "명지전문대학",
+      "nameEn": "명지전문대학",
+      "region": "서대문구",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "목포가톨릭대학교",
+      "nameKo": "목포가톨릭대학교",
+      "nameEn": "목포가톨릭대학교",
+      "region": "목포시",
+      "type": "university",
+      "website": "https://www.mcu.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "백석대학교",
+      "nameKo": "백석대학교",
+      "nameEn": "백석대학교",
+      "region": "천안시",
+      "type": "university",
+      "website": "http://www.bu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "부산경상대학교",
+      "nameKo": "부산경상대학교",
+      "nameEn": "부산경상대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://www.bsks.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "부산공업대학교",
+      "nameKo": "부산공업대학교",
+      "nameEn": "부산공업대학교",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "부산과학기술대학교",
+      "nameKo": "부산과학기술대학교",
+      "nameEn": "부산과학기술대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://bithome.bit.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "부산대학교",
+      "nameKo": "부산대학교",
+      "nameEn": "부산대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://www.pusan.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "부산수산대학교",
+      "nameKo": "부산수산대학교",
+      "nameEn": "부산수산대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "부산장신대학교",
+      "nameKo": "부산장신대학교",
+      "nameEn": "부산장신대학교",
+      "region": "김해시",
+      "type": "university",
+      "website": "http://www.bjc.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "부천대학교",
+      "nameKo": "부천대학교",
+      "nameEn": "부천대학교",
+      "region": "부천시",
+      "type": "university",
+      "website": "http://www.bc.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "상명대학교",
+      "nameKo": "상명대학교",
+      "nameEn": "상명대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.smu.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "상주대학교",
+      "nameKo": "상주대학교",
+      "nameEn": "상주대학교",
+      "region": "상주시",
+      "type": "university",
+      "website": "http://www.sangju.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서남대학교",
+      "nameKo": "서남대학교",
+      "nameEn": "서남대학교",
+      "region": "남원시",
+      "type": "university",
+      "website": "http://www.seonam.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서라벌예술대학",
+      "nameKo": "서라벌예술대학",
+      "nameEn": "서라벌예술대학",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서울_이화여자대학교_파이퍼_홀",
+      "nameKo": "서울 이화여자대학교 파이퍼 홀",
+      "nameEn": "서울 이화여자대학교 파이퍼 홀",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서울과학기술대학교",
+      "nameKo": "서울과학기술대학교",
+      "nameEn": "서울과학기술대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.seoultech.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서울교육대학교",
+      "nameKo": "서울교육대학교",
+      "nameEn": "서울교육대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.snue.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서울대학교_구_공과대학_광산학과_교사",
+      "nameKo": "서울대학교 구 공과대학 광산학과 교사",
+      "nameEn": "서울대학교 구 공과대학 광산학과 교사",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서울디지털대학교",
+      "nameKo": "서울디지털대학교",
+      "nameEn": "서울디지털대학교",
+      "region": "",
+      "type": "university",
+      "website": "http://www.sdu.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서울시립대학교",
+      "nameKo": "서울시립대학교",
+      "nameEn": "서울시립대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.uos.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서울신학대학교",
+      "nameKo": "서울신학대학교",
+      "nameEn": "서울신학대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.stu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "서울예술대학교",
+      "nameKo": "서울예술대학교",
+      "nameEn": "서울예술대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "https://www.seoularts.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "선문대학교",
+      "nameKo": "선문대학교",
+      "nameEn": "선문대학교",
+      "region": "아산시",
+      "type": "university",
+      "website": "http://tulip.sunmoon.ac.kr/english/main.do",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "수원대학교",
+      "nameKo": "수원대학교",
+      "nameEn": "수원대학교",
+      "region": "화성시",
+      "type": "university",
+      "website": "http://www.suwon.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "신안산대학교",
+      "nameKo": "신안산대학교",
+      "nameEn": "신안산대학교",
+      "region": "안산시",
+      "type": "university",
+      "website": "http://www.sau.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "아시아대학교",
+      "nameKo": "아시아대학교",
+      "nameEn": "아시아대학교",
+      "region": "경산시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "아주대학교",
+      "nameKo": "아주대학교",
+      "nameEn": "아주대학교",
+      "region": "수원시",
+      "type": "university",
+      "website": "http://www.ajou.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "안산대학교",
+      "nameKo": "안산대학교",
+      "nameEn": "안산대학교",
+      "region": "안산시",
+      "type": "university",
+      "website": "http://www.ansan.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "연성대학교",
+      "nameKo": "연성대학교",
+      "nameEn": "연성대학교",
+      "region": "안양",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "영남대학교",
+      "nameKo": "영남대학교",
+      "nameEn": "영남대학교",
+      "region": "대구광역시",
+      "type": "university",
+      "website": "http://www.yu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "영산대학교",
+      "nameKo": "영산대학교",
+      "nameEn": "영산대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://www.ysu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "영진전문대학교",
+      "nameKo": "영진전문대학교",
+      "nameEn": "영진전문대학교",
+      "region": "부산광역시",
+      "type": "university",
+      "website": "http://www.yju.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "예원예술대학교",
+      "nameKo": "예원예술대학교",
+      "nameEn": "예원예술대학교",
+      "region": "임실군",
+      "type": "university",
+      "website": "http://www.yewon.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "용인대학교",
+      "nameKo": "용인대학교",
+      "nameEn": "용인대학교",
+      "region": "용인시",
+      "type": "university",
+      "website": "http://www.yongin.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "우석대학교",
+      "nameKo": "우석대학교",
+      "nameEn": "우석대학교",
+      "region": "전주시",
+      "type": "university",
+      "website": "http://www.woosuk.ac.kr/WoosukEnglish.do",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "울산과학기술원",
+      "nameKo": "울산과학기술원",
+      "nameEn": "울산과학기술원",
+      "region": "울산광역시",
+      "type": "university",
+      "website": "http://www.unist.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "울산과학대학교",
+      "nameKo": "울산과학대학교",
+      "nameEn": "울산과학대학교",
+      "region": "울산광역시",
+      "type": "university",
+      "website": "http://eng.uc.ac.kr/CmsHome/MainDefault.jsp",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "울산대학교",
+      "nameKo": "울산대학교",
+      "nameEn": "울산대학교",
+      "region": "울산광역시",
+      "type": "university",
+      "website": "http://www.ulsan.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "을지대학교",
+      "nameKo": "을지대학교",
+      "nameEn": "을지대학교",
+      "region": "대전",
+      "type": "university",
+      "website": "http://www.eu.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "을지대학교_대전캠퍼스",
+      "nameKo": "을지대학교 대전캠퍼스",
+      "nameEn": "을지대학교 대전캠퍼스",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "인덕대학교",
+      "nameKo": "인덕대학교",
+      "nameEn": "인덕대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.induk.ac.kr/en/index.asp",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "인천대학교",
+      "nameKo": "인천대학교",
+      "nameEn": "인천대학교",
+      "region": "인천광역시",
+      "type": "university",
+      "website": "https://www.inu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "전북대학교",
+      "nameKo": "전북대학교",
+      "nameEn": "전북대학교",
+      "region": "전주시",
+      "type": "university",
+      "website": "http://www.jbnu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "전주교육대학교",
+      "nameKo": "전주교육대학교",
+      "nameEn": "전주교육대학교",
+      "region": "전주시",
+      "type": "university",
+      "website": "http://www.jnue.ac.kr/tindex.do",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "정보전자융합공학부",
+      "nameKo": "정보전자융합공학부",
+      "nameEn": "정보전자융합공학부",
+      "region": "포항시",
+      "type": "university",
+      "website": "http://itce.postech.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "제주대학교",
+      "nameKo": "제주대학교",
+      "nameEn": "제주대학교",
+      "region": "제주시",
+      "type": "university",
+      "website": "http://www.jejunu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "제주한라대학교",
+      "nameKo": "제주한라대학교",
+      "nameEn": "제주한라대학교",
+      "region": "제주시",
+      "type": "university",
+      "website": "https://chu.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "진주교육대학교",
+      "nameKo": "진주교육대학교",
+      "nameEn": "진주교육대학교",
+      "region": "진주시",
+      "type": "university",
+      "website": "http://www.cue.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "철강대학원",
+      "nameKo": "철강대학원",
+      "nameEn": "철강대학원",
+      "region": "포항시",
+      "type": "graduate_school",
+      "website": "http://gift.postech.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "청주교육대학교",
+      "nameKo": "청주교육대학교",
+      "nameEn": "청주교육대학교",
+      "region": "청주시",
+      "type": "university",
+      "website": "https://www.cje.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "청주대학교",
+      "nameKo": "청주대학교",
+      "nameEn": "청주대학교",
+      "region": "청주시",
+      "type": "university",
+      "website": "http://www.cju.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "초당대학교",
+      "nameKo": "초당대학교",
+      "nameEn": "초당대학교",
+      "region": "무안군",
+      "type": "university",
+      "website": "http://www.chodang.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "추계예술대학교",
+      "nameKo": "추계예술대학교",
+      "nameEn": "추계예술대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.chugye.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "춘천교육대학교",
+      "nameKo": "춘천교육대학교",
+      "nameEn": "춘천교육대학교",
+      "region": "춘천시",
+      "type": "university",
+      "website": "http://www.cnue.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "충북대학교",
+      "nameKo": "충북대학교",
+      "nameEn": "충북대학교",
+      "region": "서원구",
+      "type": "university",
+      "website": "https://www.cbnu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "충청대학교",
+      "nameKo": "충청대학교",
+      "nameEn": "충청대학교",
+      "region": "청주시",
+      "type": "university",
+      "website": "http://www.ok.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "평택대학교",
+      "nameKo": "평택대학교",
+      "nameEn": "평택대학교",
+      "region": "평택시",
+      "type": "university",
+      "website": "http://www.ptu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국개발연구원_국제정책대학원대학교",
+      "nameKo": "한국개발연구원 국제정책대학원대학교",
+      "nameEn": "한국개발연구원 국제정책대학원대학교",
+      "region": "서울특별시",
+      "type": "graduate_school",
+      "website": "http://www.kdischool.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국공학대학교",
+      "nameKo": "한국공학대학교",
+      "nameEn": "한국공학대학교",
+      "region": "시흥시",
+      "type": "university",
+      "website": "https://www.tukorea.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국방송통신대학교",
+      "nameKo": "한국방송통신대학교",
+      "nameEn": "한국방송통신대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.knou.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국에너지공과대학교",
+      "nameKo": "한국에너지공과대학교",
+      "nameEn": "한국에너지공과대학교",
+      "region": "빛가람동",
+      "type": "university",
+      "website": "https://www.kentech.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국예술종합학교",
+      "nameKo": "한국예술종합학교",
+      "nameEn": "한국예술종합학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.knua.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국외국어대학교",
+      "nameKo": "한국외국어대학교",
+      "nameEn": "한국외국어대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "https://hufsenglish.hufs.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국전통문화대학교",
+      "nameKo": "한국전통문화대학교",
+      "nameEn": "한국전통문화대학교",
+      "region": "규암면",
+      "type": "university",
+      "website": "https://nuch.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국정보통신기능대학",
+      "nameKo": "한국정보통신기능대학",
+      "nameEn": "한국정보통신기능대학",
+      "region": "",
+      "type": "university",
+      "website": "http://www.ict.ac.kr/eng",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국정보통신대학교",
+      "nameKo": "한국정보통신대학교",
+      "nameEn": "한국정보통신대학교",
+      "region": "유성구",
+      "type": "university",
+      "website": "http://www.icu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국폴리텍vi대학",
+      "nameKo": "한국폴리텍VI대학",
+      "nameEn": "한국폴리텍VI대학",
+      "region": "",
+      "type": "university",
+      "website": "http://www.dgpc.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한국항공대학교",
+      "nameKo": "한국항공대학교",
+      "nameEn": "한국항공대학교",
+      "region": "고양시",
+      "type": "university",
+      "website": "http://www.kau.ac.kr/english",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한동대학교",
+      "nameKo": "한동대학교",
+      "nameEn": "한동대학교",
+      "region": "흥해읍",
+      "type": "university",
+      "website": "https://www.handong.edu",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한려대학교",
+      "nameKo": "한려대학교",
+      "nameEn": "한려대학교",
+      "region": "광양읍",
+      "type": "university",
+      "website": "http://www.hanlyo.ac.kr/hanlyo/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한림대학교",
+      "nameKo": "한림대학교",
+      "nameEn": "한림대학교",
+      "region": "춘천시",
+      "type": "university",
+      "website": "http://www.hallym.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한림성심대학교",
+      "nameKo": "한림성심대학교",
+      "nameEn": "한림성심대학교",
+      "region": "춘천시",
+      "type": "university",
+      "website": "http://www.hsc.ac.kr/site/hsc/main.do",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한민학교",
+      "nameKo": "한민학교",
+      "nameEn": "한민학교",
+      "region": "논산시",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한서대학교",
+      "nameKo": "한서대학교",
+      "nameEn": "한서대학교",
+      "region": "서산시",
+      "type": "university",
+      "website": "http://www.hanseo.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한성대학교_디자인아트평생교육원",
+      "nameKo": "한성대학교 디자인아트평생교육원",
+      "nameEn": "한성대학교 디자인아트평생교육원",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://edubank.hansung.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한세대학교",
+      "nameKo": "한세대학교",
+      "nameEn": "한세대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://www.hansei.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한신대학교",
+      "nameKo": "한신대학교",
+      "nameEn": "한신대학교",
+      "region": "오산시",
+      "type": "university",
+      "website": "http://www.hs.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "한양사이버대학교",
+      "nameKo": "한양사이버대학교",
+      "nameEn": "한양사이버대학교",
+      "region": "서울특별시",
+      "type": "university",
+      "website": "http://en.hycu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "홍익대학교_국제디자인전문대학원",
+      "nameKo": "홍익대학교 국제디자인전문대학원",
+      "nameEn": "홍익대학교 국제디자인전문대학원",
+      "region": "서울특별시",
+      "type": "graduate_school",
+      "website": "http://www.idas.ac.kr",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "횃불트리니티신학대학원대학교",
+      "nameKo": "횃불트리니티신학대학원대학교",
+      "nameEn": "횃불트리니티신학대학원대학교",
+      "region": "서울특별시",
+      "type": "graduate_school",
+      "website": "https://www.ttgu.ac.kr/",
+      "source": "Wikidata CC0"
+    },
+    {
+      "id": "효성여자대학교",
+      "nameKo": "효성여자대학교",
+      "nameEn": "효성여자대학교",
+      "region": "",
+      "type": "university",
+      "website": "",
+      "source": "Wikidata CC0"
+    }
+  ]
+}

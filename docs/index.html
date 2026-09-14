@@ -711,6 +711,13 @@
     .setup-status { color: var(--muted); font-size: 13px; }
     @media(max-width:760px){ .setup-steps{grid-template-columns:1fr 1fr}.setup-actions{display:grid}.setup-actions .primary,.setup-actions .secondary{width:100%} }
 
+
+
+    /* 2026-09-14 full Korean university catalog selector */
+    .catalog-tools { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 8px; align-items: end; }
+    .catalog-count { color: var(--muted); font-size: 12px; }
+    @media(max-width:760px){ .catalog-tools{grid-template-columns:1fr} }
+
   </style>
 </head>
 <body>
@@ -846,10 +853,11 @@
         <div class="school-strip-head">
           <div>
             <h3>대학교별 장학금 찾기</h3>
-            <p class="school-note">먼저 세종권 수요가 높은 홍익대 세종, 고려대 세종부터 열었습니다. 학교는 이용 지역과 요청이 많은 순서대로 하나씩 추가합니다.</p>
+            <p class="school-note">Wikidata CC0 기반 한국 대학/대학원 카탈로그를 불러와 선택할 수 있습니다. 홍익대 세종, 고려대 세종은 세종권 우선 학교로 최상단 고정합니다.</p>
           </div>
           <span class="badge university">세종권 우선</span>
         </div>
+        <div class="catalog-tools"><span class="catalog-count" id="catalog-count">한국 대학/대학원 카탈로그 로딩 중…</span></div>
         <div class="school-picker">
           <div class="field"><label for="profile-school">내 대학교</label><select id="profile-school"><option value="">학교 선택 안 함</option><option value="hongik_sejong">홍익대학교 세종캠퍼스</option><option value="korea_sejong">고려대학교 세종캠퍼스</option></select></div>
           <div class="school-focus-list" aria-label="빠른 학교 선택"><button class="school-chip" type="button" data-school="hongik_sejong">홍대 세종</button><button class="school-chip" type="button" data-school="korea_sejong">고대 세종</button><button class="school-chip" type="button" data-school="">전체 학교/외부 장학</button></div>
@@ -1278,21 +1286,46 @@
     function renderUniversitySetup() {
       const setup = document.querySelector("#university-setup");
       const school = profile.school || "";
-      const catalog = schoolCatalog[school];
+      const catalog = schoolCatalog[school] || universityCatalog.find((u) => u.id === school);
       if (!setup) return;
       setup.classList.toggle("active", Boolean(school));
-      document.querySelector("#setup-school-badge").textContent = catalog ? (catalog[currentLang] || catalog.ko) : "학교 미선택";
-      document.querySelector("#setup-status").textContent = catalog ? `${catalog.ko} 장학금 셋업 준비됨 · ${catalog.region}권 우선` : "대학교를 선택하거나 AI 상담에서 학교를 알려주세요.";
+      document.querySelector("#setup-school-badge").textContent = catalog ? (catalog[currentLang] || catalog.ko || catalog.nameKo || catalog.nameEn) : "학교 미선택";
+      document.querySelector("#setup-status").textContent = catalog ? `${catalog.ko || catalog.nameKo || catalog.nameEn} 장학금 셋업 준비됨${catalog.region ? ` · ${catalog.region}권 우선` : ""}` : "대학교를 선택하거나 AI 상담에서 학교를 알려주세요.";
     }
 
     function setupUniversityScholarships(includeForeign = false) {
       if (!profile.school) { document.querySelector("#setup-status").textContent = "먼저 대학교를 선택해주세요."; return; }
-      const school = schoolCatalog[profile.school];
-      const setup = { school: profile.school, includeForeign, portal: school.portal, region: school.region, setupAt: new Date().toISOString(), steps: ["portal", "rules", "calendar", "auto"] };
+      const school = schoolCatalog[profile.school] || universityCatalog.find((u) => u.id === profile.school);
+      const setup = { school: profile.school, includeForeign, portal: school.portal || school.website || "", region: school.region || "", setupAt: new Date().toISOString(), steps: ["portal", "rules", "calendar", "auto"] };
       localStorage.setItem("scholarcloud-university-setup", JSON.stringify(setup));
       document.querySelectorAll(".setup-step").forEach((step) => step.classList.add("done"));
-      document.querySelector("#setup-status").textContent = `${school.ko} 셋업 완료: 교내 장학금, 지역 장학금${includeForeign ? ", 외국인 학생 조건" : ""}을 맞춤 공고에 반영합니다.`;
+      document.querySelector("#setup-status").textContent = `${school.ko || school.nameKo || school.nameEn} 셋업 완료: 교내 장학금, 지역 장학금${includeForeign ? ", 외국인 학생 조건" : ""}을 맞춤 공고에 반영합니다.`;
       renderHome();
+    }
+
+
+
+    let universityCatalog = [];
+    async function loadUniversityCatalog() {
+      try {
+        const response = await fetch(`./universities.json?t=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) throw new Error("catalog http " + response.status);
+        const data = await response.json();
+        universityCatalog = Array.isArray(data.items) ? data.items : [];
+        populateUniversityOptions();
+        const catalogCount = document.querySelector("#catalog-count");
+        if (catalogCount) catalogCount.textContent = `${universityCatalog.length}개 한국 대학/대학원 카탈로그 로드됨 · Wikidata CC0 기반`;
+      } catch (error) {
+        universityCatalog = Object.entries(schoolCatalog).map(([id, value]) => ({ id, nameKo: value.ko, nameEn: value.en, region: value.region, website: value.portal }));
+        populateUniversityOptions();
+        const catalogCount = document.querySelector("#catalog-count");
+        if (catalogCount) catalogCount.textContent = "전체 카탈로그 로드 실패 · 우선 학교만 표시 중";
+      }
+    }
+    function populateUniversityOptions() {
+      const selects = [document.querySelector("#profile-school"), document.querySelector("#profile-school-mirror")].filter(Boolean);
+      const options = ['<option value="">학교 선택 안 함</option>'].concat(universityCatalog.map((u) => `<option value="${u.id}">${u.nameKo}${u.region ? ` · ${u.region}` : ""}</option>`));
+      selects.forEach((select) => { const current = select.value || profile.school || ""; select.innerHTML = options.join(""); select.value = current; });
     }
 
     const onboardingQuestions = [
@@ -1538,6 +1571,7 @@
     loadProfile();
     refreshData();
     applyLanguage();
+    loadUniversityCatalog();
     function showAdUpToThreeTimesDaily() {
       const key = `scholarcloud-ad-${new Date().toISOString().slice(0, 10)}`;
       const seen = Number(localStorage.getItem(key) || 0);
