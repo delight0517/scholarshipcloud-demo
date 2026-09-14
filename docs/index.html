@@ -762,7 +762,6 @@
     .layout { order: 5; }
     .subscription-card { order: 6; }
     main { display: flex !important; flex-direction: column; }
-    .ad-slot { display: none !important; }
     .side { display: none !important; }
     .layout { grid-template-columns: 1fr !important; }
     .flow-hidden-copy { display:none !important; }
@@ -801,6 +800,15 @@
     .flow-step b { color: #ccfbf1 !important; }
     .home-grid .login-hero { display: none !important; }
     @media(max-width:760px){ .sidebar-auth{grid-column:1/-1;border-top:1px solid var(--line)} .sidebar-auth-title{color:var(--ink)} .sidebar-auth-note{color:var(--muted)} .sidebar-auth input{border:1px solid var(--line)} }
+
+
+
+    /* 2026-09-14 marketer ad placements */
+    .ad-slot { display: grid !important; place-items: center; min-height: 92px; border: 1px dashed #cbd5e1; border-radius: 20px; background: linear-gradient(135deg,#ffffff,#f8fafc); color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }
+    .ad-slot.compact { min-height: 72px; }
+    .ad-label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+    .ad-fallback { line-height: 1.45; }
+    .ad-fallback strong { color: var(--ink); }
 
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -894,6 +902,11 @@
       </section>
 
 
+
+      <section class="ad-slot compact" id="ad-top" aria-label="광고 영역 상단">
+        <div class="ad-fallback"><span class="ad-label">AD</span><strong>장학금·유학·학생 금융</strong> 관련 광고 영역</div>
+      </section>
+
       <section class="browse-modes" aria-label="장학금 보기 방식">
         <div class="home-card-title">
           <h3>장학금 보기 방식</h3>
@@ -930,6 +943,11 @@
           </div>
         </div>
       </section>
+
+      <section class="ad-slot compact" id="ad-before-plus" aria-label="광고 영역 Plus 전">
+        <div class="ad-fallback"><span class="ad-label">AD</span>학생에게 방해되지 않는 하단 광고 슬롯</div>
+      </section>
+
       <section class="home-card subscription-card is-payment" id="subscription-autoapply" aria-label="Plus 결제">
         <div class="home-card-title">
           <div><h3>Plus 결제</h3><div class="price-line"><strong>월 20,000원</strong><span class="small">월 20,000원 프리미엄 구독</span></div></div>
@@ -1036,9 +1054,7 @@
           <span class="account-status" id="account-status">로그인하지 않은 로컬 프로필</span>
         </div>
       </section>
-      <div class="ad-slot" id="ad-slot" aria-label="광고 영역">
-        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px" data-ad-client="ca-pub-REPLACE_WITH_PUBLISHER_ID" data-ad-slot="REPLACE_WITH_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      </div>
+      <section class="ad-slot compact" id="ad-profile" aria-label="광고 영역 프로필 아래"><div class="ad-fallback"><span class="ad-label">AD</span>장학금 준비에 도움되는 서비스 광고 슬롯</div></section>
 
       <section class="controls" aria-label="공고 필터">
         <div class="field">
@@ -1083,6 +1099,11 @@
 
       <section class="layout">
         <div>
+
+          <section class="ad-slot" id="ad-results" aria-label="광고 영역 결과 중간">
+            <div class="ad-fallback"><span class="ad-label">AD</span>검색 결과 사이에 표시되는 네이티브 광고 슬롯</div>
+          </section>
+
           <div class="list" id="scholarship-list" aria-live="polite"></div>
           <div class="empty" id="empty">조건에 맞는 공고가 없습니다. 필터를 넓혀보세요.</div>
         </div>
@@ -1522,6 +1543,19 @@
       if (state) state.textContent = auth?.username ? `BlueCloud 로그인 중: ${auth.username}` : "로그인하면 학교·지역·전공 기준으로 바로 정리됩니다.";
     }
 
+
+
+    function initAdSlots() {
+      const publisherReady = !document.querySelector('meta[name="google-adsense-account"]')?.content.includes('REPLACE_WITH');
+      document.querySelectorAll('.ad-slot').forEach((slot) => {
+        if (!publisherReady) return;
+        if (!slot.querySelector('.adsbygoogle')) {
+          slot.innerHTML = '<ins class="adsbygoogle" style="display:block;width:100%;min-height:90px" data-ad-client="ca-pub-REPLACE_WITH_PUBLISHER_ID" data-ad-slot="REPLACE_WITH_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+        }
+        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) {}
+      });
+    }
+
     const PLUS_PRICE_KRW = 20000;
     const CHECKOUT_ENDPOINT = "https://brainwire-f2gf.onrender.com/api/billing/scholarshipcloud/checkout";
     function updatePlusStatus() {
@@ -1867,7 +1901,7 @@
       localStorage.setItem(key, String(seen + 1));
       try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) {}
     }
-    showAdUpToThreeTimesDaily();
+    initAdSlots();
   </script>
 </body>
 </html>
