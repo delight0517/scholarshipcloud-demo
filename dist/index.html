@@ -1224,6 +1224,7 @@
           </select>
         </div>
         <label class="expired-toggle"><input id="show-expired" type="checkbox"> 마감이 지난 공고도 보기</label>
+        <span class="retention-note" id="retention-note"></span>
       </section>
 
       <div class="tabs" role="tablist" aria-label="지원 대상">
@@ -1468,6 +1469,52 @@
     const SEARCH_QUERY = "장학금 대학생 대학원생 해외유학 모집 공고";
     document.querySelector("#google-search").href = `https://www.google.com/search?q=${encodeURIComponent(SEARCH_QUERY)}`;
 
+
+
+    // 2026-09-14: 마감 후 30일이 지난 공고는 사이트가 켜질 때마다(스케줄 없이,
+    // 코드 자체로) 자동으로 화면 목록에서 빼고 이 브라우저의 localStorage
+    // 보관함(scholarcloud-archived-postings)에 옮긴다. 데이터는 지우지 않고
+    // 보관함에 남긴다 — "지워도 데이터 유지" 요구사항.
+    const ARCHIVE_RETENTION_DAYS = 30;
+    const ARCHIVE_STORAGE_KEY = "scholarcloud-archived-postings";
+
+    function loadArchivedPostings() {
+      try { return JSON.parse(localStorage.getItem(ARCHIVE_STORAGE_KEY) || "[]"); } catch (_) { return []; }
+    }
+
+    function archiveKeyOf(item) { return `${item.title}__${item.deadline || ""}`; }
+
+    function applyAutoRetention(items) {
+      const archived = loadArchivedPostings();
+      const archivedKeys = new Set(archived.map(archiveKeyOf));
+      const active = [];
+      let newlyArchived = 0;
+      items.forEach((item) => {
+        if (item.daysLeft < -ARCHIVE_RETENTION_DAYS) {
+          const key = archiveKeyOf(item);
+          if (!archivedKeys.has(key)) {
+            archived.push({ ...item, archivedAt: new Date().toISOString(), archivedReason: `deadline_passed_${ARCHIVE_RETENTION_DAYS}_days` });
+            archivedKeys.add(key);
+            newlyArchived += 1;
+          }
+          return; // 활성 목록에서는 제외 — 화면에서 자동으로 사라짐
+        }
+        active.push(item);
+      });
+      if (newlyArchived > 0) {
+        try { localStorage.setItem(ARCHIVE_STORAGE_KEY, JSON.stringify(archived)); } catch (_) {}
+      }
+      return { active, archivedCount: archived.length };
+    }
+
+    function updateRetentionNote(archivedCount) {
+      const note = document.querySelector("#retention-note");
+      if (!note) return;
+      note.textContent = archivedCount > 0
+        ? `마감 30일이 지난 공고 ${archivedCount}건은 목록에서 자동으로 빠졌습니다 (데이터는 이 브라우저에 보관됨).`
+        : "마감 30일이 지난 공고는 자동으로 목록에서 빠지고, 데이터는 보관됩니다.";
+    }
+
     function normalise(item) {
       const deadlineDate = item.deadline ? new Date(item.deadline) : null;
       const daysLeft = Number.isFinite(item.daysLeft) ? item.daysLeft : (deadlineDate ? Math.ceil((deadlineDate - Date.now()) / 86400000) : 999);
@@ -1483,7 +1530,9 @@
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const remote = await response.json();
         if (!Array.isArray(remote) || !remote.length) throw new Error("공고 데이터가 비어 있습니다");
-        scholarships = remote.map(normalise);
+        const retained = applyAutoRetention(remote.map(normalise));
+        scholarships = retained.active;
+        updateRetentionNote(retained.archivedCount);
         const updated = new Date().toLocaleString("ko-KR", { dateStyle: "short", timeStyle: "short" });
         const refreshTitle = document.querySelector("#refresh-title"); const refreshStatus = document.querySelector("#refresh-status");
         if (refreshTitle) refreshTitle.textContent = `최신 데이터 · ${updated}`;
@@ -1495,7 +1544,9 @@
         updatePortalMeta();
         updateHeroCounts();
       } catch (error) {
-        scholarships = demoScholarships.map(normalise);
+        const retainedFallback = applyAutoRetention(demoScholarships.map(normalise));
+        scholarships = retainedFallback.active;
+        updateRetentionNote(retainedFallback.archivedCount);
         const refreshTitle = document.querySelector("#refresh-title"); const refreshStatus = document.querySelector("#refresh-status");
         if (refreshTitle) refreshTitle.textContent = "공고 데이터 표시 중";
         if (refreshStatus) refreshStatus.textContent = "공식 출처 링크 기준으로 최신 공고를 확인하세요";
