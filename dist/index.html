@@ -1571,11 +1571,15 @@
 
 
     function profileMatches(item) {
+      // 2026-09-14: 대학생/대학원생 구분은 화면 상단 탭(activeTab)이 이미
+      // render()의 tabMatch에서 처리한다. 여기서 profile.student로 또 한 번
+      // 걸러버리면 "대학원생" 탭을 눌러도 profile.student 기본값(student)과
+      // 충돌해 결과가 0건이 되는 버그가 생긴다 — 그래서 여기서는 audience를
+      // 다시 검사하지 않는다.
       const text = [item.title, item.provider, item.amountLabel, item.period, item.competition, item.reviews, ...item.tags].join(" ").toLowerCase();
-      const studentOk = profile.student === "student" ? item.audience === "undergraduate" || item.audience === "all" : profile.student === "graduate" ? item.audience === "graduate" || item.audience === "all" : true;
       const fieldOk = !profile.field || text.includes(String(profile.field).toLowerCase());
       const schoolOk = !profile.school || item.school === profile.school || item.source !== "university";
-      return studentOk && fieldOk && schoolOk;
+      return fieldOk && schoolOk;
     }
 
     function renderHome() {
