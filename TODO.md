@@ -29,3 +29,5 @@
 - [x] Connect ScholarshipCloud signup/login to the live BlueCloud auth API with CORS and per-account browser session.
 - [x] Add saved age, student status, and interest profile matching for scholarship cards.
 - [ ] Move scholarship profile fields from browser storage to a BlueCloud server-side profile endpoint.
+- [x] Add Korean SEO title, description, keywords, canonical, Open Graph, JSON-LD, robots.txt, and sitemap.xml.
+- [ ] Submit the public URL and sitemap in Google Search Console through Aside.
