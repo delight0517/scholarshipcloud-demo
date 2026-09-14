@@ -746,6 +746,28 @@
     .plus-benefits li::before { content: '✓'; color: #1769aa; font-weight: 900; }
     @media(max-width:760px){ .payment-panel{grid-template-columns:1fr} }
 
+
+
+    /* 2026-09-14 flow cleanup: remove repeated onboarding blocks and clarify order */
+    .flow-guide { background: #111827; color: #fff; border-radius: 24px; padding: 16px; display: grid; gap: 10px; box-shadow: var(--shadow); }
+    .flow-steps { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
+    .flow-step { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15); border-radius: 16px; padding: 10px; font-size: 13px; line-height: 1.4; }
+    .flow-step b { display: block; color: #bfdbfe; margin-bottom: 4px; }
+    .profile-editor { display: none !important; }
+    .university-setup { display: none !important; }
+    .home-grid { order: 1; }
+    .ai-onboarding { order: 2; }
+    .browse-modes { order: 3; }
+    .school-strip { order: 4; }
+    .layout { order: 5; }
+    .subscription-card { order: 6; }
+    main { display: flex !important; flex-direction: column; }
+    .ad-slot { display: none !important; }
+    .side { display: none !important; }
+    .layout { grid-template-columns: 1fr !important; }
+    .flow-hidden-copy { display:none !important; }
+    @media(max-width:760px){ .flow-steps{grid-template-columns:1fr 1fr}.flow-guide{border-radius:24px} }
+
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -768,7 +790,7 @@
     <main>
       <section class="topbar" aria-labelledby="page-title">
         <div>
-          <h1 id="page-title">내 조건에 맞는 장학금과 해외 유학 지원 공고</h1>
+          <h1 id="page-title">내 학교·지역·전공에 맞는 장학금 찾기</h1>
           <p class="subtitle">마감일, 지원 대상, 정부/기업 구분, 지원 금액, 지원 기간, 후기 기반 경쟁률 신호를 한 화면에서 비교합니다.</p>
         </div>
         <div class="refresh" aria-label="데이터 새로고침 상태">
@@ -777,6 +799,17 @@
         </div>
       </section>
 
+
+
+      <section class="flow-guide" aria-label="서비스 이용 순서">
+        <strong>이용 순서</strong>
+        <div class="flow-steps">
+          <div class="flow-step"><b>1. 로그인</b>Google 또는 BlueCloud로 시작</div>
+          <div class="flow-step"><b>2. AI 등록</b>학교, 지역, 전공, 특별조건 수집</div>
+          <div class="flow-step"><b>3. 탐색</b>최근·지역·전공·학교별 공고 확인</div>
+          <div class="flow-step"><b>4. Plus</b>결제 후 리포트와 알림 확장</div>
+        </div>
+      </section>
 
       <section class="live-tools" aria-label="언어 설정">
         <div class="lang-switcher">
@@ -799,10 +832,10 @@
       </section>
 
 
-      <section class="browse-modes" aria-label="홈 탐색 옵션">
+      <section class="browse-modes" aria-label="장학금 보기 방식">
         <div class="home-card-title">
-          <h3>홈 탐색 옵션</h3>
-          <span class="small">원하는 기준으로 빠르게 보기</span>
+          <h3>장학금 보기 방식</h3>
+          <span class="small">최근, 지역, 전공, 학교 기준으로 바로 바꿔볼 수 있습니다.</span>
         </div>
         <div class="browse-mode-tabs" role="tablist" aria-label="공고 보기 방식">
           <button class="browse-mode active" type="button" data-mode="recent">최근별로 보기</button>
@@ -813,14 +846,14 @@
         <div class="browse-results" id="browse-results"></div>
       </section>
 
-      <section class="home-grid" aria-label="홈 요약">
+      <section class="home-grid" aria-label="계정 시작">
         <div class="home-card" id="recent-home">
-          <div class="home-card-title"><h3>최근 공고</h3><span class="small">홈에서 바로 확인</span></div>
+          <div class="home-card-title"><h3>최근 공고 미리보기</h3><span class="small">홈에서 바로 확인</span></div>
           <div class="recent-list" id="recent-list"></div>
         </div>
         <div class="home-card login-hero" id="easy-login">
-          <div class="home-card-title"><h3>BlueCloud 빠른 로그인</h3><span class="small" id="login-chip">로그인 유지 가능</span></div>
-          <p class="profile-note">한 번 로그인하면 이 브라우저에서 프로필과 연관 공고를 바로 불러옵니다.</p>
+          <div class="home-card-title"><h3>로그인하고 내 장학금 보기</h3><span class="small" id="login-chip">로그인 유지 가능</span></div>
+          <p class="profile-note">한 번 로그인하면 다음 방문부터 내 학교·지역·전공 기준으로 바로 이어볼 수 있습니다.</p>
           <div class="login-form">
             <input id="quick-username" autocomplete="username" placeholder="BlueCloud 아이디">
             <input id="quick-password" type="password" autocomplete="current-password" placeholder="비밀번호">
@@ -835,15 +868,15 @@
           </div>
         </div>
       </section>
-      <section class="home-card subscription-card is-payment" id="subscription-autoapply" aria-label="ScholarshipCloud Plus 결제">
+      <section class="home-card subscription-card is-payment" id="subscription-autoapply" aria-label="Plus 결제 결제">
         <div class="home-card-title">
-          <div><h3>ScholarshipCloud Plus</h3><div class="price-line"><strong>월 20,000원</strong><span class="small">장학금 탐색 프리미엄 구독</span></div></div>
+          <div><h3>Plus 결제</h3><div class="price-line"><strong>월 20,000원</strong><span class="small">월 20,000원 프리미엄 구독</span></div></div>
           <button class="primary" id="subscribe-button" type="button">Plus 결제 시작</button>
         </div>
         <div class="payment-panel">
           <div class="payment-box">
             <strong>Plus 구독 결제</strong>
-            <p class="payment-note">결제 시스템 연결 준비가 끝나면 이 버튼이 실제 PG 체크아웃으로 이동합니다. 현재는 결제 의사 저장과 체크아웃 연결 지점을 제공합니다.</p>
+            <p class="payment-note">BlueCloud 로그인 후 Plus 결제를 시작할 수 있습니다. 결제 서버가 연결되면 안전한 체크아웃으로 이동합니다.</p>
             <ul class="plus-benefits">
               <li>내 학교/지역/전공 기준 고급 매칭</li>
               <li>마감 임박 공고 우선 알림</li>
@@ -911,11 +944,11 @@
         </div>
       </section>
 
-      <section class="school-strip" aria-label="대학교별 장학금 찾기">
+      <section class="school-strip" aria-label="학교 선택">
         <div class="school-strip-head">
           <div>
-            <h3>대학교별 장학금 찾기</h3>
-            <p class="school-note">Wikidata CC0 기반 한국 대학/대학원 카탈로그를 불러와 선택할 수 있습니다. 홍익대 세종, 고려대 세종은 세종권 우선 학교로 최상단 고정합니다.</p>
+            <h3>학교 선택</h3>
+            <p class="school-note">한국 대학/대학원 목록에서 내 학교를 선택하세요. 선택한 학교는 AI 등록 기준과 맞춤 공고에 반영됩니다.</p>
           </div>
           <span class="badge university">세종권 우선</span>
         </div>
@@ -926,9 +959,9 @@
         </div>
       </section>
 
-      <section class="profile-editor" aria-label="BlueCloud 맞춤 프로필">
-        <h3>BlueCloud 맞춤 프로필</h3>
-        <p class="profile-note">계정을 만들고 내 조건을 저장하면 해당되는 장학금만 우선 표시합니다.</p>
+      <section class="profile-editor" aria-label="내 정보 수정">
+        <h3>내 정보 수정</h3>
+        <p class="profile-note">AI 등록 후 필요할 때만 수정하는 상세 정보입니다.</p>
         <div class="profile-grid">
           <div class="field"><label for="profile-age">나이</label><input id="profile-age" type="number" min="13" max="100" placeholder="예: 21"></div>
           <div class="field"><label for="profile-student">현재 상태</label><select id="profile-student"><option value="student">대학생</option><option value="graduate">대학원생</option><option value="other">예비/기타</option></select></div>
@@ -1220,12 +1253,16 @@
         document.querySelector("#refresh-status").textContent = "공식 출처 링크 포함 · 새로고침으로 다시 확인";
         status.textContent = `${scholarships.length}개 공고를 불러왔습니다.`;
         render();
+        renderHome();
+        renderBrowseModes();
       } catch (error) {
         scholarships = demoScholarships.map(normalise);
-        document.querySelector("#refresh-title").textContent = "공식 데이터 연결 대기 중";
-        document.querySelector("#refresh-status").textContent = "현재 데모 데이터로 표시 · 출처 링크에서 최신 공고 확인";
-        status.textContent = "원격 데이터가 없어 데모 데이터를 표시합니다.";
+        document.querySelector("#refresh-title").textContent = "공고 데이터 표시 중";
+        document.querySelector("#refresh-status").textContent = "공식 출처 링크 기준으로 최신 공고를 확인하세요";
+        status.textContent = "기본 공고 데이터를 표시합니다.";
         render();
+        renderHome();
+        renderBrowseModes();
       }
     }
 
@@ -1309,8 +1346,8 @@
     };
     const i18n = {
       ko: {
-        title: "내 조건에 맞는 장학금과 해외 유학 지원 공고",
-        subtitle: "마감일, 지원 대상, 정부/기업/학교 구분, 지원 금액, 지역, 대학교 장학금을 한 화면에서 비교합니다.",
+        title: "내 학교·지역·전공에 맞는 장학금 찾기",
+        subtitle: "로그인하면 AI가 학교, 지역, 전공, 특별조건을 물어보고 맞춤 장학금을 정리합니다.",
         languageLabel: "언어",
         languageStatus: "외국인 학생을 위한 영어/다국어 시스템 준비됨",
         setupTitle: "대학교 장학금 셋업",
