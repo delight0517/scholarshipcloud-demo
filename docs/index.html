@@ -2000,14 +2000,19 @@
       const maxDeadline = deadline.value === "all" ? Infinity : Number(deadline.value);
       const minAmount = Number(amount.value);
       const showExpired = document.querySelector("#show-expired")?.checked;
+      const termTokens = term.split(/\s+/).filter(Boolean);
       const filtered = scholarships.filter((item) => {
         const tabMatch = activeTab === "all" || item.audience === activeTab;
         const sourceMatch = source.value === "all" || item.source === source.value;
         const deadlineMatch = item.daysLeft <= maxDeadline;
         const amountMatch = item.amount >= minAmount;
         const expiredMatch = showExpired || item.daysLeft >= 0;
-        const text = [item.title, item.provider, item.amountLabel, item.period, item.competition, item.reviews, ...item.tags].join(" ").toLowerCase();
-        return tabMatch && sourceMatch && deadlineMatch && amountMatch && expiredMatch && profileMatches(item) && text.includes(term);
+        const text = [item.title, item.provider, item.amountLabel, item.period, item.competition, item.reviews, item.region, item.school, ...item.tags].join(" ").toLowerCase();
+        // 검색어를 통짜 문구가 아니라 단어 단위(AND)로 나눠서 매칭한다.
+        // "홍익대 세종 생활비"처럼 학교+지역+주제를 같이 적어도 각 단어가
+        // 공고 텍스트 어딘가에 있으면 매칭되도록 해서 0건 실패를 줄인다.
+        const textMatch = termTokens.length === 0 || termTokens.some((token) => text.includes(token));
+        return tabMatch && sourceMatch && deadlineMatch && amountMatch && expiredMatch && profileMatches(item) && textMatch;
       });
 
       list.innerHTML = filtered.map((item) => `
