@@ -670,6 +670,30 @@
     .badge.university { background: #ede9fe; color: #6d28d9; }
     @media (max-width: 760px) { .school-strip { border-radius: 24px; padding: 16px; } .school-picker { grid-template-columns: 1fr; } .school-focus-list { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; } .school-chip { flex: 0 0 auto; } }
 
+
+
+    /* 2026-09-14 BlueCloud AI onboarding */
+    .ai-onboarding { background: linear-gradient(180deg, #ffffff, #f8fbff); border: 1px solid var(--line); border-radius: 24px; padding: 18px; box-shadow: var(--shadow); display: none; gap: 14px; }
+    .ai-onboarding.active { display: grid; }
+    .ai-chat-head { display: flex; justify-content: space-between; gap: 12px; align-items: start; flex-wrap: wrap; }
+    .ai-chat-head h3 { margin-bottom: 4px; }
+    .ai-badge { border-radius: 999px; padding: 7px 10px; background: #eef2ff; color: #3730a3; font-size: 12px; font-weight: 900; }
+    .ai-chat-log { max-height: 320px; overflow: auto; display: grid; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 20px; background: #f8fafc; }
+    .msg { max-width: 86%; padding: 11px 13px; border-radius: 18px; font-size: 14px; line-height: 1.5; }
+    .msg.ai { background: #ffffff; border: 1px solid #e5e7eb; color: var(--ink); border-top-left-radius: 6px; }
+    .msg.user { justify-self: end; background: #1769aa; color: #fff; border-top-right-radius: 6px; }
+    .ai-answer-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .ai-answer-row input { border-radius: 16px; }
+    .ai-suggestions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .ai-suggestion { border: 1px solid var(--line); border-radius: 999px; background: #fff; padding: 8px 11px; cursor: pointer; font-weight: 800; font-size: 12px; }
+    .onboarding-summary { display: grid; gap: 8px; }
+    .onboarding-summary[hidden] { display: none !important; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
+    .summary-grid div { border: 1px solid var(--line); border-radius: 16px; background: #fff; padding: 10px; }
+    .summary-grid span { display: block; color: var(--muted); font-size: 11px; margin-bottom: 4px; }
+    .google-signup { background: #fff; color: #111827; border: 1px solid var(--line); }
+    @media (max-width:760px){ .ai-onboarding{border-radius:24px;padding:16px}.ai-answer-row{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr 1fr}.msg{max-width:94%} }
+
   </style>
 </head>
 <body>
@@ -719,6 +743,7 @@
             <input id="quick-password" type="password" autocomplete="current-password" placeholder="비밀번호">
             <label class="remember-row"><input id="remember-login" type="checkbox" checked> 이 기기에서 로그인 유지</label>
             <button class="primary" id="quick-login" type="button">로그인하고 내 공고 보기</button>
+            <button class="secondary google-signup" id="google-signup" type="button">Google로 BlueCloud 가입</button>
           </div>
           <div class="quick-match" aria-label="내 연관 공고 요약">
             <div><span>맞춤 공고</span><strong id="match-count">0개</strong></div>
@@ -740,6 +765,28 @@
         <div class="auto-queue" id="auto-queue"></div>
       </section>
 
+
+
+      <section class="ai-onboarding" id="ai-onboarding" aria-label="BlueCloud AI 등록 상담">
+        <div class="ai-chat-head">
+          <div>
+            <h3>BlueCloud AI 등록 상담</h3>
+            <p class="profile-note">가입 직후 LLM 상담처럼 질문을 받아 상황, 지역, 대학교, 특별 장학금 조건을 수집합니다. 이 정보가 BlueCloud 등록 기준이 됩니다.</p>
+          </div>
+          <span class="ai-badge" id="ai-step-badge">등록 기준 수집 전</span>
+        </div>
+        <div class="ai-chat-log" id="ai-chat-log" aria-live="polite"></div>
+        <div class="ai-suggestions" id="ai-suggestions"></div>
+        <div class="ai-answer-row">
+          <input id="ai-answer" placeholder="예: 세종 거주, 홍익대 세종, 소득분위 3분위, 이공계">
+          <button class="primary" id="ai-send" type="button">답변 보내기</button>
+        </div>
+        <div class="onboarding-summary" id="onboarding-summary" hidden>
+          <h3>등록 기준 요약</h3>
+          <div class="summary-grid" id="summary-grid"></div>
+          <button class="primary" id="apply-onboarding" type="button">이 정보로 BlueCloud 등록 완료</button>
+        </div>
+      </section>
 
       <section class="school-strip" aria-label="대학교별 장학금 찾기">
         <div class="school-strip-head">
@@ -1122,8 +1169,82 @@
         status.textContent = `BlueCloud 로그인 유지: ${username}`;
         if (chip) chip.textContent = "로그인 유지 중";
         renderHome();
+        openOnboarding();
         return true;
       } catch (error) { status.textContent = error.message; if (chip) chip.textContent = "로그인 실패"; return false; }
+    }
+
+
+
+    const onboardingQuestions = [
+      { key: "situation", label: "상황", q: "지금 상황을 알려주세요. 학년, 전공, 성적/소득/근로 여부, 필요한 지원 형태를 편하게 적어주세요.", chips: ["생활비 장학금이 급해요", "등록금 감면 위주", "이공계 성적 장학", "근로장학도 가능"] },
+      { key: "region", label: "지역", q: "주로 확인할 지역은 어디인가요? 거주지, 학교 위치, 통학 가능 지역을 알려주세요.", chips: ["세종", "대전/세종/충청", "서울", "전국 가능"] },
+      { key: "school", label: "대학교", q: "다니는 대학교를 알려주세요. 현재는 홍익대 세종, 고려대 세종부터 학교별 장학금을 우선 지원합니다.", chips: ["홍익대학교 세종캠퍼스", "고려대학교 세종캠퍼스", "아직 학교 선택 안 함"] },
+      { key: "special", label: "특별 조건", q: "해당될 수 있는 특별 장학금 조건이 있나요? 지역인재, 저소득, 장애, 다문화, 국가유공자, 창업, 봉사, 해외유학 등 무엇이든 적어주세요.", chips: ["지역인재", "저소득/소득구간", "창업/공모전", "해외유학"] }
+    ];
+    let onboardingStep = Number(localStorage.getItem("scholarcloud-onboarding-step") || 0);
+    let onboardingProfile = JSON.parse(localStorage.getItem("scholarcloud-onboarding") || "{}") || {};
+
+    function schoolValueFromText(text) {
+      if (/홍익|홍대/i.test(text) && /세종/i.test(text)) return "hongik_sejong";
+      if (/고려|고대/i.test(text) && /세종/i.test(text)) return "korea_sejong";
+      return profile.school || "";
+    }
+
+    function addChatMessage(role, text) {
+      const log = document.querySelector("#ai-chat-log");
+      const node = document.createElement("div");
+      node.className = `msg ${role}`;
+      node.textContent = text;
+      log.appendChild(node);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function openOnboarding(reset = false) {
+      const box = document.querySelector("#ai-onboarding");
+      box.classList.add("active");
+      box.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (reset || !document.querySelector("#ai-chat-log").children.length) {
+        document.querySelector("#ai-chat-log").innerHTML = "";
+        onboardingStep = reset ? 0 : onboardingStep;
+        if (reset) onboardingProfile = {};
+        askOnboardingQuestion();
+      }
+    }
+
+    function askOnboardingQuestion() {
+      const badge = document.querySelector("#ai-step-badge");
+      const suggestions = document.querySelector("#ai-suggestions");
+      if (onboardingStep >= onboardingQuestions.length) { finishOnboarding(); return; }
+      const item = onboardingQuestions[onboardingStep];
+      badge.textContent = `${onboardingStep + 1}/${onboardingQuestions.length} · ${item.label}`;
+      addChatMessage("ai", item.q);
+      suggestions.innerHTML = item.chips.map((chip) => `<button class="ai-suggestion" type="button">${chip}</button>`).join("");
+    }
+
+    function submitOnboardingAnswer(text) {
+      text = text.trim();
+      if (!text || onboardingStep >= onboardingQuestions.length) return;
+      const item = onboardingQuestions[onboardingStep];
+      addChatMessage("user", text);
+      onboardingProfile[item.key] = text;
+      onboardingStep += 1;
+      localStorage.setItem("scholarcloud-onboarding", JSON.stringify(onboardingProfile));
+      localStorage.setItem("scholarcloud-onboarding-step", String(onboardingStep));
+      document.querySelector("#ai-answer").value = "";
+      setTimeout(askOnboardingQuestion, 150);
+    }
+
+    function finishOnboarding() {
+      document.querySelector("#ai-step-badge").textContent = "등록 기준 수집 완료";
+      document.querySelector("#ai-suggestions").innerHTML = "";
+      document.querySelector("#onboarding-summary").hidden = false;
+      const school = schoolValueFromText(onboardingProfile.school || "");
+      const region = onboardingProfile.region || "";
+      profile = { ...profile, field: [onboardingProfile.situation, onboardingProfile.special].filter(Boolean).join(" ").slice(0, 80), school, region, onboarding: onboardingProfile };
+      localStorage.setItem("scholarcloud-profile", JSON.stringify(profile));
+      document.querySelector("#summary-grid").innerHTML = onboardingQuestions.map((q) => `<div><span>${q.label}</span><strong>${onboardingProfile[q.key] || "미입력"}</strong></div>`).join("");
+      if (school) syncSchoolChoice(school); else { render(); renderHome(); }
     }
 
     function render() {
@@ -1245,6 +1366,13 @@
       localStorage.setItem("scholarcloud-auto-enroll", btn.dataset.title || "recent");
       alert("자동 등록 후보에 추가했습니다. 실제 제출 전에는 확인을 받습니다.");
     });
+
+
+    document.querySelector("#ai-send").addEventListener("click", () => submitOnboardingAnswer(document.querySelector("#ai-answer").value));
+    document.querySelector("#ai-answer").addEventListener("keydown", (event) => { if (event.key === "Enter") submitOnboardingAnswer(event.target.value); });
+    document.querySelector("#ai-suggestions").addEventListener("click", (event) => { const chip = event.target.closest(".ai-suggestion"); if (chip) submitOnboardingAnswer(chip.textContent); });
+    document.querySelector("#google-signup").addEventListener("click", () => { localStorage.setItem("scholarcloud-auth", JSON.stringify({ username: "google-user", provider: "google", remember: true, loginAt: new Date().toISOString() })); document.querySelector("#account-status").textContent = "Google BlueCloud 가입 흐름 준비됨"; document.querySelector("#login-chip").textContent = "Google 가입 후 AI 등록"; openOnboarding(true); });
+    document.querySelector("#apply-onboarding").addEventListener("click", () => { localStorage.setItem("scholarcloud-registration-complete", "true"); document.querySelector("#account-status").textContent = "BlueCloud 등록 완료: AI 수집 프로필 기준"; alert("BlueCloud 등록 기준이 저장되었습니다. 이제 학교/지역/특별조건 기반 장학금이 우선 표시됩니다."); });
 
     document.querySelector("#bluecloud-account").addEventListener("click", async () => {
       const username = prompt("BlueCloud 아이디를 입력하세요 (새 계정이면 자동 가입 시도)");
