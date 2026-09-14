@@ -789,6 +789,19 @@
     @media(max-width:1060px){ .flow-hub{top:10px}.flow-actions{grid-template-columns:repeat(3,1fr)} .layout{grid-template-columns:1fr}.list{max-height:none;overflow:visible} }
     @media(max-width:760px){ .flow-hub{top:88px; border-radius:22px; padding:12px; margin:0 -2px}.flow-actions{grid-template-columns:repeat(2,1fr)} .flow-action{min-height:50px}.flow-action.primary-action{grid-column:1/-1} }
 
+
+
+    /* 2026-09-14 search-first UX: login optional like job boards */
+    .sidebar-auth { border-top: 1px solid rgba(255,255,255,.16); padding-top: 14px; display: grid; gap: 8px; }
+    .sidebar-auth input { min-height: 40px; border-radius: 12px; border: 0; padding: 9px 10px; font-size: 13px; }
+    .sidebar-auth .primary, .sidebar-auth .secondary, .sidebar-auth .google-signup { width: 100%; min-height: 40px; border-radius: 12px; font-size: 12px; }
+    .sidebar-auth-title { font-weight: 900; color: #fff; }
+    .sidebar-auth-note { color: #cbd5e1; font-size: 12px; line-height: 1.45; }
+    .flow-guide { background: linear-gradient(135deg, #0f766e, #1769aa) !important; }
+    .flow-step b { color: #ccfbf1 !important; }
+    .home-grid .login-hero { display: none !important; }
+    @media(max-width:760px){ .sidebar-auth{grid-column:1/-1;border-top:1px solid var(--line)} .sidebar-auth-title{color:var(--ink)} .sidebar-auth-note{color:var(--muted)} .sidebar-auth input{border:1px solid var(--line)} }
+
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -802,6 +815,16 @@
         <button type="button">▣ 지원 캘린더</button>
         <button type="button">◌ 프리미엄 보고서</button>
       </nav>
+
+      <div class="sidebar-auth" aria-label="로그인 및 회원가입">
+        <div class="sidebar-auth-title">계정</div>
+        <div class="sidebar-auth-note">로그인 없이도 장학금 검색은 가능합니다. 로그인하면 저장, 알림, AI 맞춤 추천을 이어볼 수 있어요.</div>
+        <input id="home-quick-username" autocomplete="username" placeholder="BlueCloud 아이디">
+        <input id="home-quick-password" type="password" autocomplete="current-password" placeholder="비밀번호">
+        <button class="primary" id="quick-login" type="button">로그인</button>
+        <button class="secondary google-signup" id="google-signup" type="button">Google로 회원가입</button>
+      </div>
+
       <div class="profile">
         <strong id="sidebar-user">BlueCloud 로그인 전</strong>
         <span id="sidebar-profile">내 학교·지역·전공 기준으로 장학금을 설정하세요</span>
@@ -822,13 +845,13 @@
 
 
 
-      <section class="flow-guide" aria-label="서비스 이용 순서">
-        <strong>이용 순서</strong>
+      <section class="flow-guide" aria-label="서비스 검색 방법">
+        <strong>검색 방법</strong>
         <div class="flow-steps">
-          <div class="flow-step"><b>1. 로그인</b>Google 또는 BlueCloud로 시작</div>
-          <div class="flow-step"><b>2. AI 등록</b>학교, 지역, 전공, 특별조건 수집</div>
-          <div class="flow-step"><b>3. 탐색</b>최근·지역·전공·학교별 공고 확인</div>
-          <div class="flow-step"><b>4. Plus</b>결제 후 리포트와 알림 확장</div>
+          <div class="flow-step"><b>1. 검색</b>로그인 없이 장학금 먼저 찾기</div>
+          <div class="flow-step"><b>2. 좁히기</b>지역·학교·전공 기준으로 필터</div>
+          <div class="flow-step"><b>3. 비교</b>마감일·금액·지원 조건 비교</div>
+          <div class="flow-step"><b>4. 저장</b>로그인하면 저장·알림·AI 추천 사용</div>
         </div>
       </section>
 
@@ -894,11 +917,11 @@
           <div class="home-card-title"><h3>로그인하고 내 장학금 보기</h3><span class="small" id="login-chip">로그인 유지 가능</span></div>
           <p class="profile-note">한 번 로그인하면 다음 방문부터 내 학교·지역·전공 기준으로 바로 이어볼 수 있습니다.</p>
           <div class="login-form">
-            <input id="quick-username" autocomplete="username" placeholder="BlueCloud 아이디">
-            <input id="quick-password" type="password" autocomplete="current-password" placeholder="비밀번호">
-            <label class="remember-row"><input id="remember-login" type="checkbox" checked> 이 기기에서 로그인 유지</label>
-            <button class="primary" id="quick-login" type="button">로그인하고 내 공고 보기</button>
-            <button class="secondary google-signup" id="google-signup" type="button">Google로 BlueCloud 가입</button>
+            <input id="home-quick-username" autocomplete="username" placeholder="BlueCloud 아이디">
+            <input id="home-quick-password" type="password" autocomplete="current-password" placeholder="비밀번호">
+            <label class="remember-row"><input id="home-remember-login" type="checkbox" checked> 이 기기에서 로그인 유지</label>
+            <button class="primary" id="home-quick-login" type="button">로그인하고 내 공고 보기</button>
+            <button class="secondary google-signup" id="home-google-signup" type="button">Google로 BlueCloud 가입</button>
           </div>
           <div class="quick-match" aria-label="내 연관 공고 요약">
             <div><span>맞춤 공고</span><strong id="match-count">0개</strong></div>
@@ -1387,7 +1410,7 @@
     const i18n = {
       ko: {
         title: "내 학교·지역·전공에 맞는 장학금 찾기",
-        subtitle: "로그인하면 AI가 학교, 지역, 전공, 특별조건을 물어보고 맞춤 장학금을 정리합니다.",
+        subtitle: "로그인 없이도 최근·지역·전공·학교별 장학금을 검색할 수 있습니다. 로그인하면 저장과 맞춤 추천이 편해집니다.",
         languageLabel: "언어",
         languageStatus: "외국인 학생을 위한 영어/다국어 시스템 준비됨",
         setupTitle: "대학교 장학금 셋업",
@@ -1753,7 +1776,7 @@
       const username = document.querySelector("#quick-username").value.trim();
       const password = document.querySelector("#quick-password").value;
       if (!username || !password) { document.querySelector("#account-status").textContent = "아이디와 비밀번호를 입력하세요."; return; }
-      await connectBlueCloud(username, password, document.querySelector("#remember-login").checked);
+      await connectBlueCloud(username, password, (document.querySelector("#remember-login")?.checked ?? true));
     });
 
     document.querySelector("#subscribe-button").addEventListener("click", startPlusCheckout);
