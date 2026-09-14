@@ -768,6 +768,27 @@
     .flow-hidden-copy { display:none !important; }
     @media(max-width:760px){ .flow-steps{grid-template-columns:1fr 1fr}.flow-guide{border-radius:24px} }
 
+
+
+    /* 2026-09-14 compact product flow: no endless scroll, top-first actions */
+    .flow-hub { position: sticky; top: 18px; z-index: 25; background: rgba(255,255,255,.92); backdrop-filter: blur(18px); border: 1px solid var(--line); border-radius: 24px; padding: 14px; box-shadow: var(--shadow); display: grid; gap: 12px; }
+    .flow-hub-head { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+    .flow-hub-title { display:grid; gap:2px; }
+    .flow-hub-title strong { font-size:18px; }
+    .flow-actions { display:grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap:8px; }
+    .flow-action { border:1px solid var(--line); border-radius:16px; background:#fff; min-height:54px; padding:9px 10px; cursor:pointer; display:grid; place-items:center; gap:2px; font-weight:900; text-align:center; color:var(--ink); }
+    .flow-action.primary-action { background:linear-gradient(135deg,#1769aa,#087d75); color:#fff; border:0; }
+    .flow-action span { display:block; font-size:11px; font-weight:700; opacity:.78; }
+    .compact-hidden { display:none !important; }
+    .dashboard-section { scroll-margin-top: 120px; }
+    .home-grid { grid-template-columns: 1fr; }
+    .home-grid #recent-home { display:none; }
+    .layout { grid-template-columns: minmax(0,1fr) 320px; }
+    .list { max-height: 720px; overflow:auto; padding-right:4px; }
+    .list::before { content:'맞춤/최근 공고'; font-weight:900; display:block; margin:0 0 8px; color:var(--ink); }
+    @media(max-width:1060px){ .flow-hub{top:10px}.flow-actions{grid-template-columns:repeat(3,1fr)} .layout{grid-template-columns:1fr}.list{max-height:none;overflow:visible} }
+    @media(max-width:760px){ .flow-hub{top:88px; border-radius:22px; padding:12px; margin:0 -2px}.flow-actions{grid-template-columns:repeat(2,1fr)} .flow-action{min-height:50px}.flow-action.primary-action{grid-column:1/-1} }
+
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -808,6 +829,24 @@
           <div class="flow-step"><b>2. AI 등록</b>학교, 지역, 전공, 특별조건 수집</div>
           <div class="flow-step"><b>3. 탐색</b>최근·지역·전공·학교별 공고 확인</div>
           <div class="flow-step"><b>4. Plus</b>결제 후 리포트와 알림 확장</div>
+        </div>
+      </section>
+
+
+      <section class="flow-hub" aria-label="빠른 시작 허브">
+        <div class="flow-hub-head">
+          <div class="flow-hub-title">
+            <strong>내 장학금 빠른 시작</strong>
+            <span class="small" id="flow-login-state">로그인하면 학교·지역·전공 기준으로 바로 정리됩니다.</span>
+          </div>
+          <span class="badge university">상단에서 바로 이동</span>
+        </div>
+        <div class="flow-actions">
+          <button class="flow-action primary-action" id="flow-google" type="button">Google로 시작<span>AI 등록 상담</span></button>
+          <button class="flow-action" id="flow-login" type="button">BlueCloud 로그인<span>기존 계정</span></button>
+          <button class="flow-action" data-scroll-target="browse-modes" type="button">공고 탐색<span>최근·지역·전공</span></button>
+          <button class="flow-action" data-scroll-target="subscription-autoapply" type="button">Plus 결제<span>월 20,000원</span></button>
+          <button class="flow-action" id="flow-profile" type="button">내 정보 수정<span>학교/조건</span></button>
         </div>
       </section>
 
@@ -923,7 +962,7 @@
       </section>
 
 
-      <section class="university-setup" id="university-setup" aria-label="대학교 장학금 셋업">
+      <section class="university-setup compact-hidden" id="university-setup" aria-label="대학교 장학금 셋업">
         <div class="setup-head">
           <div>
             <h3 id="setup-title">대학교 장학금 셋업</h3>
@@ -1330,6 +1369,7 @@
         status.textContent = `BlueCloud 로그인 유지: ${username}`;
         if (chip) chip.textContent = "로그인 유지 중";
         document.querySelector("#sidebar-user").textContent = `BlueCloud: ${username}`;
+        updateFlowState();
         renderHome();
         openOnboarding();
         return true;
@@ -1428,6 +1468,7 @@
               localStorage.setItem("scholarcloud-auth", JSON.stringify({ username, provider: "google", token: data.token, remember: true, loginAt: new Date().toISOString() }));
               status.textContent = `BlueCloud 로그인 유지: ${username}`;
               document.querySelector("#sidebar-user").textContent = `BlueCloud: ${username}`;
+        updateFlowState();
               if (chip) chip.textContent = "Google 로그인 유지 중";
               openOnboarding(true);
             } catch (error) { status.textContent = error.message; }
@@ -1445,6 +1486,18 @@
     }
 
 
+
+
+
+    function scrollToSection(id) {
+      const node = document.querySelector(`#${id}`);
+      if (node) node.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    function updateFlowState() {
+      const auth = JSON.parse(localStorage.getItem("scholarcloud-auth") || sessionStorage.getItem("scholarcloud-auth") || "null");
+      const state = document.querySelector("#flow-login-state");
+      if (state) state.textContent = auth?.username ? `BlueCloud 로그인 중: ${auth.username}` : "로그인하면 학교·지역·전공 기준으로 바로 정리됩니다.";
+    }
 
     const PLUS_PRICE_KRW = 20000;
     const CHECKOUT_ENDPOINT = "https://brainwire-f2gf.onrender.com/api/billing/scholarshipcloud/checkout";
@@ -1469,6 +1522,7 @@
       } catch (error) {
         localStorage.setItem("scholarcloud-plus", JSON.stringify({ status: "pending_checkout", plan: payload.plan, priceKrw: PLUS_PRICE_KRW, requestedAt: new Date().toISOString() }));
         updatePlusStatus();
+    updateFlowState();
         alert("Plus 결제 요청을 저장했습니다. 실제 PG 키와 결제 서버가 연결되면 바로 체크아웃으로 이어집니다.");
       }
     }
@@ -1706,6 +1760,7 @@
 
     document.querySelector("#manage-billing").addEventListener("click", () => alert("결제 정보 관리 기능은 PG 포털 연결 후 활성화됩니다."));
     updatePlusStatus();
+    updateFlowState();
 
     document.addEventListener("click", (event) => {
       const btn = event.target.closest(".auto-enroll");
@@ -1728,6 +1783,13 @@
       localStorage.setItem("scholarcloud-browse-mode", activeBrowseMode);
       renderBrowseModes();
     }));
+
+
+    let flowProfileBound = true;
+    document.querySelector("#flow-google").addEventListener("click", startGoogleSignup);
+    document.querySelector("#flow-login").addEventListener("click", () => document.querySelector("#quick-username").focus());
+    document.querySelector("#flow-profile").addEventListener("click", () => { const p = document.querySelector("#profile-editor"); p.classList.toggle("compact-hidden"); scrollToSection("profile-editor"); });
+    document.querySelectorAll("[data-scroll-target]").forEach((button) => button.addEventListener("click", () => scrollToSection(button.dataset.scrollTarget)));
 
     document.querySelector("#language-select").addEventListener("change", (event) => { currentLang = event.target.value; localStorage.setItem("scholarcloud-language", currentLang); applyLanguage(); });
     document.querySelector("#setup-university").addEventListener("click", () => setupUniversityScholarships(false));
