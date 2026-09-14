@@ -1181,7 +1181,16 @@
           <div class="field"><label for="profile-student">현재 상태</label><select id="profile-student"><option value="student">대학생</option><option value="graduate">대학원생</option><option value="other">예비/기타</option></select></div>
           <div class="field"><label for="profile-field">관심 분야</label><input id="profile-field" type="text" placeholder="예: 이공계, 교환학생"></div>
           <div class="field" id="profile-school-inline"><label for="profile-school-mirror">학교</label><select id="profile-school-mirror"><option value="">학교 선택 안 함</option><option value="hongik_sejong">홍익대학교 세종캠퍼스</option><option value="korea_sejong">고려대학교 세종캠퍼스</option></select></div>
+          <div class="field"><label for="profile-grade">학년</label><select id="profile-grade"><option value="">선택 안 함</option><option value="1">1학년</option><option value="2">2학년</option><option value="3">3학년</option><option value="4">4학년</option><option value="5">5학년(5년제)</option></select></div>
+          <div class="field"><label for="profile-gender">성별</label><select id="profile-gender"><option value="">선택 안 함</option><option value="male">남성</option><option value="female">여성</option></select></div>
+          <div class="field"><label for="profile-gpa">직전학기 평점(GPA)</label><input id="profile-gpa" type="number" step="0.01" min="0" max="4.5" placeholder="예: 3.7"></div>
+          <div class="field"><label for="profile-credits">이수학점</label><input id="profile-credits" type="number" min="0" max="30" placeholder="예: 18"></div>
+          <div class="field"><label for="profile-volunteer">이번학기 봉사활동시간</label><input id="profile-volunteer" type="number" min="0" max="200" placeholder="예: 6"></div>
+          <div class="field"><label for="profile-income">소득분위</label><select id="profile-income"><option value="">선택 안 함</option><option value="1">1분위</option><option value="2">2분위</option><option value="3">3분위</option><option value="4">4분위</option><option value="5">5분위</option><option value="6">6분위</option><option value="7">7분위</option><option value="8">8분위</option><option value="9">9분위</option><option value="10">10분위</option></select></div>
+          <div class="field"><label for="profile-citizenship">국적 구분</label><select id="profile-citizenship"><option value="">선택 안 함</option><option value="domestic">내국인</option><option value="foreign">외국인</option><option value="foreign_parents">외국인(부모 모두 외국인)</option></select></div>
+          <div class="field"><label for="profile-special">해당 사항</label><select id="profile-special"><option value="">없음</option><option value="basic_livelihood">기초생활수급자</option><option value="veteran">국가유공자(본인/자녀)</option><option value="disability">장애 판정</option></select></div>
         </div>
+        <p class="profile-elig-note">학년·성적·봉사시간 등을 입력하면 내가 해당 안 되는 공고는 목록에서 자동으로 빠지고, 준비가 부족한 항목은 카드에 표시됩니다.</p>
         <div class="profile-actions">
           <button class="primary" id="save-profile" type="button">프로필 저장·매칭하기</button>
           <button class="secondary" id="bluecloud-account" type="button">BlueCloud 계정 만들기 / 로그인</button>
@@ -1513,6 +1522,86 @@
       note.textContent = archivedCount > 0
         ? `마감 30일이 지난 공고 ${archivedCount}건은 목록에서 자동으로 빠졌습니다 (데이터는 이 브라우저에 보관됨).`
         : "마감 30일이 지난 공고는 자동으로 목록에서 빠지고, 데이터는 보관됩니다.";
+    }
+
+
+
+    // 2026-09-14: 홍익대 공식 장학금 기준 + 공지사항 스캔 데이터에 태그된
+    // eligibility 조건과, 사용자가 입력한 준비상태(학년/성별/GPA/이수학점/
+    // 봉사시간/소득분위/국적/특수자격)를 비교하는 매칭 엔진.
+    //  - 완전히 해당 안 되는 것(성별/학년/캠퍼스/국적 불일치)은 결과에서 통째로 제외한다.
+    //  - 조건은 맞지만 준비가 부족한 것(성적/학점/봉사시간 미달)은 보여주되 "부족한 것"을 표시한다.
+    function getEligibilityProfile() {
+      return {
+        grade: document.querySelector("#profile-grade")?.value || "",
+        gender: document.querySelector("#profile-gender")?.value || "",
+        gpa: document.querySelector("#profile-gpa")?.value,
+        credits: document.querySelector("#profile-credits")?.value,
+        volunteerHours: document.querySelector("#profile-volunteer")?.value,
+        incomeDecile: document.querySelector("#profile-income")?.value,
+        citizenship: document.querySelector("#profile-citizenship")?.value || "",
+        special: document.querySelector("#profile-special")?.value || "",
+      };
+    }
+
+    // 완전히 해당 안 되는 항목이면 true를 반환해서 목록에서 통째로 제외한다.
+    // 사용자가 아직 입력 안 한 항목은 불확실하므로 제외하지 않는다(모르는 걸로 걸러내지 않음).
+    function isHardIneligible(item, ep) {
+      const e = item.eligibility;
+      if (!e) return false;
+      if (e.gender && e.gender !== "all" && ep.gender && e.gender !== ep.gender) return true;
+      if (e.campus && e.campus !== "전체" && e.campus !== "캠퍼스단위" && e.campus !== "학과단위") {
+        // 캠퍼스 값이 "서울" 같은 구체 캠퍼스인 경우, 우리 사이트는 세종캠퍼스 학생 전용이므로
+        // 세종이 아닌 다른 캠퍼스 전용 공고는 항상 제외한다.
+        if (e.campus !== "세종") return true;
+      }
+      if (e.gradeMin && ep.grade && Number(ep.grade) < e.gradeMin) return true;
+      if (e.gradeMax && ep.grade && Number(ep.grade) > e.gradeMax) return true;
+      if (e.citizenshipRequired) {
+        if (ep.citizenship && ep.citizenship !== e.citizenshipRequired) return true;
+      }
+      if (e.citizenship === "domestic_only" && ep.citizenship && ep.citizenship !== "domestic") return true;
+      if (e.specialCategoryRequired && ep.special && ep.special !== e.specialCategoryRequired) return true;
+      if (e.residencyRequired && ep.school) {
+        // 지역 요건: 우리 데이터는 세종권 학교만 다루므로, residencyRequired가 세종이면
+        // 세종캠퍼스 학생은 통과, 그 외는 보수적으로 제외하지 않는다(주소지는 학교와 다를 수 있음).
+      }
+      return false;
+    }
+
+    // 조건은 통과했지만 준비가 부족한 부분을 사람이 읽기 좋은 문장으로 정리한다.
+    function getReadinessChecklist(item, ep) {
+      const e = item.eligibility;
+      if (!e) return [];
+      const rows = [];
+      if (e.gpaMin != null) {
+        if (ep.gpa === "" || ep.gpa == null) rows.push({ status: "unknown", text: `최소 평점 ${e.gpaMin.toFixed ? e.gpaMin.toFixed(1) : e.gpaMin} 이상 필요 (내 평점 미입력)` });
+        else if (Number(ep.gpa) >= e.gpaMin) rows.push({ status: "ok", text: `평점 조건 충족 (${e.gpaMin} 이상)` });
+        else rows.push({ status: "missing", text: `평점이 ${(e.gpaMin - Number(ep.gpa)).toFixed(2)}점 부족합니다 (필요 ${e.gpaMin} 이상, 현재 ${ep.gpa})` });
+      }
+      if (e.creditsMin != null) {
+        if (ep.credits === "" || ep.credits == null) rows.push({ status: "unknown", text: `최소 이수학점 ${e.creditsMin}점 필요 (내 이수학점 미입력)` });
+        else if (Number(ep.credits) >= e.creditsMin) rows.push({ status: "ok", text: `이수학점 조건 충족 (${e.creditsMin}점 이상)` });
+        else rows.push({ status: "missing", text: `이수학점이 ${e.creditsMin - Number(ep.credits)}학점 부족합니다 (필요 ${e.creditsMin}점, 현재 ${ep.credits}점)` });
+      }
+      if (e.volunteerHoursRequired) {
+        const exempt = Array.isArray(e.volunteerHoursGradeExempt) && ep.grade && e.volunteerHoursGradeExempt.includes(Number(ep.grade));
+        if (exempt) rows.push({ status: "ok", text: `4학년(예외 학년)은 봉사활동 실적 없이도 지원 가능합니다.` });
+        else if (ep.volunteerHours === "" || ep.volunteerHours == null) rows.push({ status: "unknown", text: `사회봉사활동 ${e.volunteerHoursRequired}시간 이상 필요 (이번학기 봉사시간 미입력)` });
+        else if (Number(ep.volunteerHours) >= e.volunteerHoursRequired) rows.push({ status: "ok", text: `봉사활동 시간 조건 충족 (${e.volunteerHoursRequired}시간 이상)` });
+        else rows.push({ status: "missing", text: `봉사활동이 ${e.volunteerHoursRequired - Number(ep.volunteerHours)}시간 부족합니다 (필요 ${e.volunteerHoursRequired}시간, 현재 ${ep.volunteerHours}시간)` });
+      }
+      if (e.incomeDecileMax != null) {
+        if (ep.incomeDecile === "" || ep.incomeDecile == null) rows.push({ status: "unknown", text: `소득 ${e.incomeDecileMax}분위 이하 대상 (내 소득분위 미입력)` });
+        else if (Number(ep.incomeDecile) <= e.incomeDecileMax) rows.push({ status: "ok", text: `소득분위 조건 충족 (${e.incomeDecileMax}분위 이하)` });
+        else rows.push({ status: "missing", text: `소득분위가 기준(${e.incomeDecileMax}분위 이하)보다 높습니다 (현재 ${ep.incomeDecile}분위)` });
+      }
+      if (e.specialCategoryRequired) {
+        const label = { basic_livelihood: "기초생활수급자", veteran: "국가유공자", disability: "장애 판정" }[e.specialCategoryRequired] || e.specialCategoryRequired;
+        if (!ep.special) rows.push({ status: "unknown", text: `${label} 증빙 대상자만 지원 가능 (내 해당 사항 미입력)` });
+        else if (ep.special === e.specialCategoryRequired) rows.push({ status: "ok", text: `${label} 대상 확인됨` });
+      }
+      return rows;
     }
 
     function normalise(item) {
@@ -2005,6 +2094,7 @@
       const minAmount = Number(amount.value);
       const showExpired = document.querySelector("#show-expired")?.checked;
       const termTokens = term.split(/\s+/).filter(Boolean);
+      const eligProfile = getEligibilityProfile();
       const filtered = scholarships.filter((item) => {
         const tabMatch = activeTab === "all" || item.audience === activeTab;
         const sourceMatch = source.value === "all" || item.source === source.value;
@@ -2016,7 +2106,10 @@
         // "홍익대 세종 생활비"처럼 학교+지역+주제를 같이 적어도 각 단어가
         // 공고 텍스트 어딘가에 있으면 매칭되도록 해서 0건 실패를 줄인다.
         const textMatch = termTokens.length === 0 || termTokens.some((token) => text.includes(token));
-        return tabMatch && sourceMatch && deadlineMatch && amountMatch && expiredMatch && profileMatches(item) && textMatch;
+        // 성별/학년/캠퍼스/국적 등이 완전히 다르면(예: 서울캠퍼스 전용, 성별 다름)
+        // 아예 목록에서 제외한다.
+        const eligibleMatch = !isHardIneligible(item, eligProfile);
+        return tabMatch && sourceMatch && deadlineMatch && amountMatch && expiredMatch && profileMatches(item) && textMatch && eligibleMatch;
       });
 
       list.innerHTML = filtered.map((item) => `
@@ -2034,6 +2127,7 @@
             <span class="badge ${item.source}">${sourceLabel(item.source)}</span>
             ${item.tags.map((tag) => `<span class="badge">${tag}</span>`).join("")}
           </div>
+          ${getReadinessChecklist(item, eligProfile).length ? `<div class="elig-check">${getReadinessChecklist(item, eligProfile).map((row) => `<div class="elig-row ${row.status}"><span class="dot">${row.status === "ok" ? "✓" : row.status === "missing" ? "!" : "?"}</span><span>${row.text}</span></div>`).join("")}</div>` : ""}
           <div class="stats">
             <div class="stat"><span>마감지원일</span><strong>D-${item.daysLeft}</strong></div>
             <div class="stat"><span>지원 비용</span><strong>${item.amountLabel}</strong></div>
@@ -2178,6 +2272,11 @@
       if (!value) return;
       input.value = "";
       askAiSend(value);
+    });
+
+    ["#profile-grade", "#profile-gender", "#profile-gpa", "#profile-credits", "#profile-volunteer", "#profile-income", "#profile-citizenship", "#profile-special"].forEach((sel) => {
+      const el = document.querySelector(sel);
+      if (el) el.addEventListener("input", render);
     });
 
     document.querySelector("#language-select").addEventListener("change", (event) => { currentLang = event.target.value; localStorage.setItem("scholarcloud-language", currentLang); applyLanguage(); });
