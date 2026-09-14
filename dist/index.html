@@ -868,7 +868,7 @@
           </div>
         </div>
       </section>
-      <section class="home-card subscription-card is-payment" id="subscription-autoapply" aria-label="Plus 결제 결제">
+      <section class="home-card subscription-card is-payment" id="subscription-autoapply" aria-label="Plus 결제">
         <div class="home-card-title">
           <div><h3>Plus 결제</h3><div class="price-line"><strong>월 20,000원</strong><span class="small">월 20,000원 프리미엄 구독</span></div></div>
           <button class="primary" id="subscribe-button" type="button">Plus 결제 시작</button>
@@ -1032,7 +1032,7 @@
               <div class="score">92</div>
               <div>
                 <strong>해외 교환 + 이공계 장학 우선</strong>
-                <div class="small">학년, 전공, 관심 국가, 마감 일정이 반영된 데모 점수입니다.</div>
+                <div class="small">학년, 전공, 관심 국가, 마감 일정이 반영된 예상 점수입니다.</div>
               </div>
             </div>
           </section>
@@ -1204,7 +1204,7 @@
         "region": "세종",
         "deadline": "2026-10-18",
         "amount": 250,
-        "amountLabel": "유형별 최대 250만원 수준 데모",
+        "amountLabel": "유형별 최대 250만원",
         "period": "1학기 단위",
         "competition": "중간 · 지역/생활지원 요건과 증빙서류 중요",
         "reviews": "지역 기반 장학은 주소지, 재학 상태, 중복수혜 가능 여부를 반드시 확인해야 합니다.",
@@ -1236,7 +1236,7 @@
     function normalise(item) {
       const deadlineDate = item.deadline ? new Date(item.deadline) : null;
       const daysLeft = Number.isFinite(item.daysLeft) ? item.daysLeft : (deadlineDate ? Math.ceil((deadlineDate - Date.now()) / 86400000) : 999);
-      return { ...item, daysLeft, tags: item.tags || [], amount: Number(item.amount || 0), amountLabel: item.amountLabel || "공고 원문 확인", period: item.period || "공고 원문 확인", competition: item.competition || "공식 평가자료 없음", reviews: item.reviews || "후기 데이터 없음" };
+      return { ...item, daysLeft, tags: item.tags || [], amount: Number(item.amount || 0), amountLabel: item.amountLabel || "공고 원문에서 확인", period: item.period || "공고 원문에서 확인", competition: item.competition || "공식 평가자료 없음", reviews: item.reviews || "후기 데이터 없음" };
     }
 
     async function refreshData() {
