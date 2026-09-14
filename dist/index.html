@@ -732,6 +732,20 @@
     .browse-card span { color: var(--muted); font-size: 12px; }
     @media(max-width:760px){ .browse-results{grid-template-columns:1fr}.browse-modes{border-radius:24px} }
 
+
+
+    /* 2026-09-14 Plus payment launch, auto-apply hidden until production-ready */
+    .subscription-card.is-payment { border-color: #bfdbfe; background: linear-gradient(180deg, #eff6ff, #ffffff); }
+    .payment-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .7fr); gap: 12px; align-items: stretch; }
+    .payment-box { border: 1px solid var(--line); background: #fff; border-radius: 18px; padding: 14px; display: grid; gap: 8px; }
+    .payment-box strong { font-size: 18px; }
+    .payment-note { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .coming-soon-feature { display: none !important; }
+    .plus-benefits { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .plus-benefits li { display: flex; gap: 8px; color: #344054; font-size: 13px; line-height: 1.45; }
+    .plus-benefits li::before { content: '✓'; color: #1769aa; font-weight: 900; }
+    @media(max-width:760px){ .payment-panel{grid-template-columns:1fr} }
+
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -821,17 +835,35 @@
           </div>
         </div>
       </section>
-      <section class="home-card subscription-card" id="subscription-autoapply" aria-label="구독자 자동 신청">
+      <section class="home-card subscription-card is-payment" id="subscription-autoapply" aria-label="ScholarshipCloud Plus 결제">
         <div class="home-card-title">
-          <div><h3>ScholarshipCloud Plus</h3><div class="price-line"><strong>월 20,000원</strong><span class="small">구독자 자동 등록/자동 신청 준비</span></div></div>
-          <button class="primary" id="subscribe-button" type="button">구독 대기 등록</button>
+          <div><h3>ScholarshipCloud Plus</h3><div class="price-line"><strong>월 20,000원</strong><span class="small">장학금 탐색 프리미엄 구독</span></div></div>
+          <button class="primary" id="subscribe-button" type="button">Plus 결제 시작</button>
         </div>
-        <ul class="premium-steps">
-          <li>내 조건에 맞는 신규 공고를 자동 등록하고 지원 가능성 점수를 매깁니다.</li>
-          <li>필수 서류, 마감일, 원문 링크를 자동 체크해 신청 대기열에 올립니다.</li>
-          <li>민감정보 제출이나 비용 발생 가능성이 있는 신청은 제출 직전 확인을 받습니다.</li>
-        </ul>
-        <div class="auto-queue" id="auto-queue"></div>
+        <div class="payment-panel">
+          <div class="payment-box">
+            <strong>Plus 구독 결제</strong>
+            <p class="payment-note">결제 시스템 연결 준비가 끝나면 이 버튼이 실제 PG 체크아웃으로 이동합니다. 현재는 결제 의사 저장과 체크아웃 연결 지점을 제공합니다.</p>
+            <ul class="plus-benefits">
+              <li>내 학교/지역/전공 기준 고급 매칭</li>
+              <li>마감 임박 공고 우선 알림</li>
+              <li>지원 전략 리포트와 서류 체크리스트</li>
+            </ul>
+          </div>
+          <div class="payment-box">
+            <strong id="plus-status-title">구독 전</strong>
+            <span class="payment-note" id="plus-status">월 20,000원 결제 준비 중</span>
+            <button class="secondary" id="manage-billing" type="button">결제 정보 관리</button>
+          </div>
+        </div>
+        <div class="coming-soon-feature" aria-hidden="true">
+          <ul class="premium-steps">
+            <li>내 조건에 맞는 신규 공고를 자동 등록하고 지원 가능성 점수를 매깁니다.</li>
+            <li>필수 서류, 마감일, 원문 링크를 자동 체크해 신청 대기열에 올립니다.</li>
+            <li>민감정보 제출이나 비용 발생 가능성이 있는 신청은 제출 직전 확인을 받습니다.</li>
+          </ul>
+          <div class="auto-queue" id="auto-queue"></div>
+        </div>
       </section>
 
 
@@ -1375,6 +1407,35 @@
       }
     }
 
+
+
+    const PLUS_PRICE_KRW = 20000;
+    const CHECKOUT_ENDPOINT = "https://brainwire-f2gf.onrender.com/api/billing/scholarshipcloud/checkout";
+    function updatePlusStatus() {
+      const sub = JSON.parse(localStorage.getItem("scholarcloud-plus") || "null");
+      document.querySelector("#plus-status-title").textContent = sub?.status === "pending_checkout" ? "결제 진행 대기" : sub?.status === "active" ? "Plus 활성" : "구독 전";
+      document.querySelector("#plus-status").textContent = sub?.status === "pending_checkout" ? "체크아웃 연결 또는 결제 완료 확인을 기다리는 중입니다." : sub?.status === "active" ? "Plus 구독이 활성화되었습니다." : "월 20,000원 결제 준비 중";
+    }
+    async function startPlusCheckout() {
+      const auth = JSON.parse(localStorage.getItem("scholarcloud-auth") || sessionStorage.getItem("scholarcloud-auth") || "null");
+      if (!auth?.token) {
+        document.querySelector("#account-status").textContent = "Plus 결제 전 BlueCloud 로그인이 필요합니다.";
+        document.querySelector("#easy-login").scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      const payload = { plan: "scholarshipcloud_plus_monthly", priceKrw: PLUS_PRICE_KRW, currency: "KRW", interval: "month", returnUrl: location.href.split("?")[0] + "?plus=success" };
+      try {
+        const response = await fetch(CHECKOUT_ENDPOINT, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${auth.token}` }, body: JSON.stringify(payload) });
+        const data = await response.json().catch(() => ({}));
+        if (response.ok && data.checkoutUrl) { location.href = data.checkoutUrl; return; }
+        throw new Error(data.error || "결제 서버 준비 중");
+      } catch (error) {
+        localStorage.setItem("scholarcloud-plus", JSON.stringify({ status: "pending_checkout", plan: payload.plan, priceKrw: PLUS_PRICE_KRW, requestedAt: new Date().toISOString() }));
+        updatePlusStatus();
+        alert("Plus 결제 요청을 저장했습니다. 실제 PG 키와 결제 서버가 연결되면 바로 체크아웃으로 이어집니다.");
+      }
+    }
+
     let activeBrowseMode = localStorage.getItem("scholarcloud-browse-mode") || "recent";
     function itemRegion(item) { return item.region || (item.tags || []).find((tag) => /서울|세종|대전|부산|충청|경기|인천|광주|대구|울산|전북|전남|경북|경남|강원|제주/.test(tag)) || "전국"; }
     function itemMajor(item) { return (item.tags || []).find((tag) => /이공계|공학|예술|디자인|인문|사회|경영|의학|간호|교육|해외|외국인|창업|근로/.test(tag)) || "공통"; }
@@ -1604,11 +1665,10 @@
       await connectBlueCloud(username, password, document.querySelector("#remember-login").checked);
     });
 
-    document.querySelector("#subscribe-button").addEventListener("click", () => {
-      localStorage.setItem("scholarcloud-plus-waitlist", "true");
-      document.querySelector("#report-output").textContent = "Plus 대기 등록 완료: 월 20,000원 구독 결제와 자동 신청 권한 동의 화면이 연결되면 자동 등록/신청 대기열이 활성화됩니다.";
-      alert("Plus 대기 등록 완료. 실제 결제/자동 제출은 별도 동의 후 활성화됩니다.");
-    });
+    document.querySelector("#subscribe-button").addEventListener("click", startPlusCheckout);
+
+    document.querySelector("#manage-billing").addEventListener("click", () => alert("결제 정보 관리 기능은 PG 포털 연결 후 활성화됩니다."));
+    updatePlusStatus();
 
     document.addEventListener("click", (event) => {
       const btn = event.target.closest(".auto-enroll");
