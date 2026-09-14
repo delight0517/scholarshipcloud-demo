@@ -26,3 +26,6 @@
 - [ ] Replace `REPLACE_WITH_PUBLISHER_ID` and `REPLACE_WITH_AD_SLOT_ID` after AdSense approval.
 - [ ] Connect an authenticated Google Programmable Search API key if in-page API results are required.
 - [ ] Automate the JSON update job from verified official scholarship sources.
+- [x] Connect ScholarshipCloud signup/login to the live BlueCloud auth API with CORS and per-account browser session.
+- [x] Add saved age, student status, and interest profile matching for scholarship cards.
+- [ ] Move scholarship profile fields from browser storage to a BlueCloud server-side profile endpoint.

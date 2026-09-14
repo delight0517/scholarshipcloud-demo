@@ -161,6 +161,14 @@
     .live-tools button, .google-link { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 10px 13px; cursor: pointer; text-decoration: none; }
     .live-status { color: var(--muted); font-size: 13px; }
     .ad-slot { min-height: 90px; display: grid; place-items: center; color: var(--muted); background: #fafbfc; border: 1px dashed var(--line); border-radius: 8px; font-size: 12px; }
+    .profile-editor { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; box-shadow: var(--shadow); display: grid; gap: 12px; }
+    .profile-editor h3 { margin: 0; }
+    .profile-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .profile-grid .field { min-width: 0; }
+    .profile-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .account-status { color: var(--muted); font-size: 13px; }
+    .profile-note { color: var(--muted); font-size: 12px; margin: 0; }
+    @media (max-width: 760px) { .profile-grid { grid-template-columns: 1fr; } }
 
     .controls {
       background: var(--panel);
@@ -551,6 +559,20 @@
         <a class="google-link" id="google-search" target="_blank" rel="noopener">Google에서 공고 찾기 ↗</a>
         <span class="live-status" id="live-status">초기 데이터 로딩 중…</span>
       </section>
+      <section class="profile-editor" aria-label="BlueCloud 맞춤 프로필">
+        <h3>BlueCloud 맞춤 프로필</h3>
+        <p class="profile-note">계정을 만들고 내 조건을 저장하면 해당되는 장학금만 우선 표시합니다.</p>
+        <div class="profile-grid">
+          <div class="field"><label for="profile-age">나이</label><input id="profile-age" type="number" min="13" max="100" placeholder="예: 21"></div>
+          <div class="field"><label for="profile-student">현재 상태</label><select id="profile-student"><option value="student">대학생</option><option value="graduate">대학원생</option><option value="other">예비/기타</option></select></div>
+          <div class="field"><label for="profile-field">관심 분야</label><input id="profile-field" type="text" placeholder="예: 이공계, 교환학생"></div>
+        </div>
+        <div class="profile-actions">
+          <button class="primary" id="save-profile" type="button">프로필 저장·매칭하기</button>
+          <button class="secondary" id="bluecloud-account" type="button">BlueCloud 계정 만들기 / 로그인</button>
+          <span class="account-status" id="account-status">로그인하지 않은 로컬 프로필</span>
+        </div>
+      </section>
       <div class="ad-slot" id="ad-slot" aria-label="광고 영역">
         <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px" data-ad-client="ca-pub-REPLACE_WITH_PUBLISHER_ID" data-ad-slot="REPLACE_WITH_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
       </div>
@@ -712,6 +734,8 @@
     const deadline = document.querySelector("#deadline");
     const amount = document.querySelector("#amount");
     let activeTab = "undergraduate";
+    let profile = JSON.parse(localStorage.getItem("scholarcloud-profile") || "null") || { age: "", student: "student", field: "" };
+    const BLUECLOUD_API = "https://brainwire-f2gf.onrender.com/api";
 
     const DATA_URL = "./scholarships.json";
     const SEARCH_QUERY = "장학금 대학생 대학원생 해외유학 모집 공고";
@@ -764,7 +788,9 @@
         const deadlineMatch = item.daysLeft <= maxDeadline;
         const amountMatch = item.amount >= minAmount;
         const text = [item.title, item.provider, item.amountLabel, item.period, item.competition, item.reviews, ...item.tags].join(" ").toLowerCase();
-        return tabMatch && sourceMatch && deadlineMatch && amountMatch && text.includes(term);
+        const profileMatch = profile.student === "student" ? item.audience === "undergraduate" || item.audience === "all" : profile.student === "graduate" ? item.audience === "graduate" || item.audience === "all" : true;
+        const interestMatch = !profile.field || text.includes(String(profile.field).toLowerCase());
+        return tabMatch && sourceMatch && deadlineMatch && amountMatch && profileMatch && interestMatch && text.includes(term);
       });
 
       list.innerHTML = filtered.map((item) => `
@@ -818,6 +844,40 @@
 
     [search, source, deadline, amount].forEach((control) => control.addEventListener("input", render));
     document.querySelector("#refresh-data").addEventListener("click", refreshData);
+    function loadProfile() {
+      document.querySelector("#profile-age").value = profile.age || "";
+      document.querySelector("#profile-student").value = profile.student || "student";
+      document.querySelector("#profile-field").value = profile.field || "";
+      const auth = JSON.parse(localStorage.getItem("scholarcloud-auth") || "null");
+      document.querySelector("#account-status").textContent = auth?.username ? `BlueCloud 로그인: ${auth.username}` : "로그인하지 않은 로컬 프로필";
+    }
+    document.querySelector("#save-profile").addEventListener("click", () => {
+      profile = { age: document.querySelector("#profile-age").value, student: document.querySelector("#profile-student").value, field: document.querySelector("#profile-field").value.trim() };
+      localStorage.setItem("scholarcloud-profile", JSON.stringify(profile));
+      activeTab = profile.student === "graduate" ? "graduate" : "undergraduate";
+      document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === activeTab));
+      document.querySelector("#live-status").textContent = "프로필 조건에 맞춰 공고를 다시 매칭했습니다.";
+      render();
+    });
+    document.querySelector("#bluecloud-account").addEventListener("click", async () => {
+      const username = prompt("BlueCloud 아이디를 입력하세요 (새 계정이면 자동 가입 시도)");
+      if (!username) return;
+      const password = prompt("비밀번호를 입력하세요");
+      if (!password) return;
+      const status = document.querySelector("#account-status");
+      try {
+        let response = await fetch(`${BLUECLOUD_API}/auth/signup`, { method: "POST", headers: { "content-type": "application/json", "x-cloud-app": "scholarshipcloud" }, body: JSON.stringify({ username, password }) });
+        let data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          response = await fetch(`${BLUECLOUD_API}/auth/login`, { method: "POST", headers: { "content-type": "application/json", "x-cloud-app": "scholarshipcloud" }, body: JSON.stringify({ username, password }) });
+          data = await response.json().catch(() => ({}));
+        }
+        if (!response.ok || !data.token) throw new Error(data.error || data.message || "BlueCloud 인증 실패");
+        localStorage.setItem("scholarcloud-auth", JSON.stringify({ username, token: data.token }));
+        status.textContent = `BlueCloud 로그인: ${username}`;
+        alert("BlueCloud 계정 연결이 완료되었습니다. 이제 프로필을 저장하세요.");
+      } catch (error) { status.textContent = error.message; }
+    });
 
     document.querySelector("#add-comment").addEventListener("click", () => {
       const input = document.querySelector("#comment-input");
@@ -835,6 +895,7 @@
     });
 
     render();
+    loadProfile();
     refreshData();
     function showAdUpToThreeTimesDaily() {
       const key = `scholarcloud-ad-${new Date().toISOString().slice(0, 10)}`;
