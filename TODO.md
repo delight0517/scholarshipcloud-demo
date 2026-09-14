@@ -17,3 +17,12 @@
 - [x] User requested real public deployment through GitHub or another suitable route.
 - [x] GitHub connector install failed, so use local authenticated GitHub CLI instead.
 - [x] Publish repository as public GitHub repo and configure GitHub Pages from /docs.
+
+## 2026-09-14 실서비스 기능 요청
+
+- [x] Add browser-side refresh from `scholarships.json` with no-cache timestamp and fallback status.
+- [x] Add Google scholarship search link and live refresh UI.
+- [x] Add AdSense slot scaffold with a daily three-view cap implementation pending final config.
+- [ ] Replace `REPLACE_WITH_PUBLISHER_ID` and `REPLACE_WITH_AD_SLOT_ID` after AdSense approval.
+- [ ] Connect an authenticated Google Programmable Search API key if in-page API results are required.
+- [ ] Automate the JSON update job from verified official scholarship sources.

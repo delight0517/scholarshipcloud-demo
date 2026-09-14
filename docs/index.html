@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ScholarCloud Demo</title>
   <meta name="description" content="장학금, 해외 유학 지원, 정부/기업 지원 공고를 개인 조건에 맞게 정리하는 데모 서비스">
+  <meta name="google-adsense-account" content="ca-pub-REPLACE_WITH_PUBLISHER_ID">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-REPLACE_WITH_PUBLISHER_ID" crossorigin="anonymous"></script>
   <style>
     :root {
       color-scheme: light;
@@ -154,6 +156,11 @@
       color: var(--muted);
       font-size: 13px;
     }
+
+    .live-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .live-tools button, .google-link { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 10px 13px; cursor: pointer; text-decoration: none; }
+    .live-status { color: var(--muted); font-size: 13px; }
+    .ad-slot { min-height: 90px; display: grid; place-items: center; color: var(--muted); background: #fafbfc; border: 1px dashed var(--line); border-radius: 8px; font-size: 12px; }
 
     .controls {
       background: var(--panel);
@@ -534,10 +541,19 @@
           <p class="subtitle">마감일, 지원 대상, 정부/기업 구분, 지원 금액, 지원 기간, 후기 기반 경쟁률 신호를 한 화면에서 비교합니다.</p>
         </div>
         <div class="refresh" aria-label="데이터 새로고침 상태">
-          <strong>데모 새로고침: 3일마다</strong>
-          <span>실서비스 목표: 1시간마다 수집 · 새 공고 알림</span>
+          <strong id="refresh-title">실시간 데이터 준비 중</strong>
+          <span id="refresh-status">공식 출처 데이터 확인 중</span>
         </div>
       </section>
+
+      <section class="live-tools" aria-label="실시간 기능">
+        <button id="refresh-data" type="button">↻ 최신 정보 가져오기</button>
+        <a class="google-link" id="google-search" target="_blank" rel="noopener">Google에서 공고 찾기 ↗</a>
+        <span class="live-status" id="live-status">초기 데이터 로딩 중…</span>
+      </section>
+      <div class="ad-slot" id="ad-slot" aria-label="광고 영역">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px" data-ad-client="ca-pub-REPLACE_WITH_PUBLISHER_ID" data-ad-slot="REPLACE_WITH_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
 
       <section class="controls" aria-label="공고 필터">
         <div class="field">
@@ -629,7 +645,7 @@
   </div>
 
   <script>
-    const scholarships = [
+    const demoScholarships = [
       {
         title: "국가우수장학금 이공계 신규장학생",
         provider: "한국장학재단",
@@ -688,6 +704,7 @@
       }
     ];
 
+    let scholarships = demoScholarships;
     const list = document.querySelector("#scholarship-list");
     const empty = document.querySelector("#empty");
     const search = document.querySelector("#search");
@@ -695,6 +712,39 @@
     const deadline = document.querySelector("#deadline");
     const amount = document.querySelector("#amount");
     let activeTab = "undergraduate";
+
+    const DATA_URL = "./scholarships.json";
+    const SEARCH_QUERY = "장학금 대학생 대학원생 해외유학 모집 공고";
+    document.querySelector("#google-search").href = `https://www.google.com/search?q=${encodeURIComponent(SEARCH_QUERY)}`;
+
+    function normalise(item) {
+      const deadlineDate = item.deadline ? new Date(item.deadline) : null;
+      const daysLeft = Number.isFinite(item.daysLeft) ? item.daysLeft : (deadlineDate ? Math.ceil((deadlineDate - Date.now()) / 86400000) : 999);
+      return { ...item, daysLeft, tags: item.tags || [], amount: Number(item.amount || 0), amountLabel: item.amountLabel || "공고 원문 확인", period: item.period || "공고 원문 확인", competition: item.competition || "공식 평가자료 없음", reviews: item.reviews || "후기 데이터 없음" };
+    }
+
+    async function refreshData() {
+      const status = document.querySelector("#live-status");
+      status.textContent = "공식 데이터 주소 확인 중…";
+      try {
+        const response = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const remote = await response.json();
+        if (!Array.isArray(remote) || !remote.length) throw new Error("공고 데이터가 비어 있습니다");
+        scholarships = remote.map(normalise);
+        const updated = new Date().toLocaleString("ko-KR", { dateStyle: "short", timeStyle: "short" });
+        document.querySelector("#refresh-title").textContent = `최신 데이터 · ${updated}`;
+        document.querySelector("#refresh-status").textContent = "공식 출처 링크 포함 · 새로고침으로 다시 확인";
+        status.textContent = `${scholarships.length}개 공고를 불러왔습니다.`;
+        render();
+      } catch (error) {
+        scholarships = demoScholarships.map(normalise);
+        document.querySelector("#refresh-title").textContent = "공식 데이터 연결 대기 중";
+        document.querySelector("#refresh-status").textContent = "현재 데모 데이터로 표시 · 출처 링크에서 최신 공고 확인";
+        status.textContent = "원격 데이터가 없어 데모 데이터를 표시합니다.";
+        render();
+      }
+    }
 
     function sourceLabel(value) {
       return {
@@ -767,6 +817,7 @@
     });
 
     [search, source, deadline, amount].forEach((control) => control.addEventListener("input", render));
+    document.querySelector("#refresh-data").addEventListener("click", refreshData);
 
     document.querySelector("#add-comment").addEventListener("click", () => {
       const input = document.querySelector("#comment-input");
@@ -784,6 +835,16 @@
     });
 
     render();
+    refreshData();
+    function showAdUpToThreeTimesDaily() {
+      const key = `scholarcloud-ad-${new Date().toISOString().slice(0, 10)}`;
+      const seen = Number(localStorage.getItem(key) || 0);
+      const slot = document.querySelector("#ad-slot");
+      if (seen >= 3) { slot.hidden = true; return; }
+      localStorage.setItem(key, String(seen + 1));
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) {}
+    }
+    showAdUpToThreeTimesDaily();
   </script>
 </body>
 </html>
