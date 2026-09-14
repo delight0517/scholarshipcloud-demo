@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>장학금 AI로 찾기 | 대학교·대학원 장학금 검색 - ScholarshipCloud</title>
+  <title>대학교·대학원 장학금 공고 검색 - ScholarshipCloud</title>
   <meta name="description" content="장학금 AI로 대학교·대학원·지역·전공별 장학금을 검색하세요. 로그인 없이 최근 공고를 보고, BlueCloud 로그인 후 맞춤 추천과 알림을 이어갑니다.">
   <meta name="keywords" content="장학금 AI, 장학금 AI로 찾기, AI 장학금 추천, 장학금 모음 사이트, 대학교 장학금, 대학원 장학금, 지역별 장학금, 전공별 장학금, 외국인 학생 장학금">
   <meta name="author" content="ScholarshipCloud">
@@ -806,6 +806,20 @@
     /* 2026-09-14 marketer ad placements */
     .ad-slot { display: grid !important; place-items: center; min-height: 92px; border: 1px dashed #cbd5e1; border-radius: 20px; background: linear-gradient(135deg,#ffffff,#f8fafc); color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }
     .ad-slot.compact { min-height: 72px; }
+    /* Student-focused house promotions */
+    .ad-slot.student-promo { display: block !important; min-height: 0; padding: 0; overflow: hidden; border: 1px solid #dbeafe; background: #fff; text-align: left; }
+    .student-promo .promo-inner { display: flex; align-items: center; gap: 16px; padding: 18px 20px; background: linear-gradient(115deg,#f0f7ff 0%,#ffffff 58%,#f5f3ff 100%); }
+    .student-promo .promo-icon { flex: 0 0 46px; width: 46px; height: 46px; display: grid; place-items: center; border-radius: 14px; font-size: 25px; background: #dbeafe; }
+    .student-promo.reminder-promo .promo-icon { background: #ede9fe; }
+    .student-promo .promo-copy { min-width: 0; flex: 1; }
+    .student-promo .ad-label { display: inline-block; margin: 0 0 4px; color: #64748b; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+    .student-promo h3 { margin: 0; color: #0f172a; font-size: 16px; line-height: 1.35; }
+    .student-promo p { margin: 4px 0 0; color: #475569; font-size: 13px; line-height: 1.45; }
+    .student-promo .promo-cta { flex: 0 0 auto; padding: 10px 13px; border-radius: 10px; background: #2563eb; color: #fff; text-decoration: none; font-weight: 800; font-size: 13px; white-space: nowrap; }
+    .student-promo.reminder-promo .promo-cta { background: #6d28d9; }
+    .student-promo .promo-cta:hover { filter: brightness(.95); }
+    @media (max-width: 640px) { .student-promo .promo-inner { align-items: flex-start; gap: 12px; padding: 15px; } .student-promo .promo-icon { flex-basis: 40px; width:40px; height:40px; font-size:21px; } .student-promo h3 { font-size:14px; } .student-promo p { font-size:12px; } .student-promo .promo-cta { padding:9px 10px; font-size:12px; } }
+
     .ad-label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
     .ad-fallback { line-height: 1.45; }
     .ad-fallback strong { color: var(--ink); }
@@ -914,7 +928,9 @@
     @media(max-width:1060px){ .app{display:block}.app aside{position:static;min-height:0;padding:14px 16px;display:flex;align-items:center;gap:16px;border-right:0;border-bottom:1px solid var(--line)} aside nav{display:flex;gap:2px;overflow:auto} aside nav button{white-space:nowrap;padding:8px 10px}.brand{white-space:nowrap} }
     @media(max-width:760px){ main{padding:14px}.portal-header{padding:18px;border-radius:14px}.portal-header h1{font-size:26px}.portal-topline{margin-bottom:16px}.portal-search{grid-template-columns:1fr}.browse-results{grid-template-columns:1fr}.browse-modes{border-radius:14px;padding:14px} }
 
-  </style>
+  
+#ask-ai-fab, #ask-ai-panel, .seo-block, #ai-onboarding, #flow-hub { display:none !important; }
+</style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <script type="application/ld+json">
@@ -935,7 +951,7 @@
 
       <div class="sidebar-auth" aria-label="로그인 및 회원가입">
         <div class="sidebar-auth-title">계정</div>
-        <div class="sidebar-auth-note">로그인 없이도 장학금 검색은 가능합니다. 로그인하면 저장, 알림, AI 맞춤 추천을 이어볼 수 있어요.</div>
+        <div class="sidebar-auth-note">로그인 없이도 장학금 검색은 가능합니다. 로그인하면 저장한 공고와 알림을 편리하게 관리할 수 있어요.</div>
         <input id="home-quick-username" autocomplete="username" placeholder="BlueCloud 아이디">
         <input id="home-quick-password" type="password" autocomplete="current-password" placeholder="비밀번호">
         <button class="primary" id="quick-login" type="button">로그인</button>
@@ -1010,8 +1026,12 @@
 
 
 
-      <section class="ad-slot compact" id="ad-top" aria-label="광고 영역 상단">
-        <div class="ad-fallback"><span class="ad-label">AD</span><strong>장학금·유학·학생 금융</strong> 관련 광고 영역</div>
+      <section class="ad-slot compact student-promo pomodoro-promo" id="ad-top" aria-label="추천 앱: auto pomodoro">
+        <div class="promo-inner">
+          <div class="promo-icon" aria-hidden="true">⏱</div>
+          <div class="promo-copy"><span class="ad-label">추천 앱</span><h3>장학금 준비, 25분씩 끝내세요</h3><p>auto pomodoro로 서류 정리와 에세이 준비 시간을 집중 단위로 관리해보세요.</p></div>
+          <a class="promo-cta" data-promo="auto-pomodoro" href="https://apps.apple.com/kr/app/auto-pomodoro/id6805697231?uo=4" target="_blank" rel="noopener">App Store에서 보기</a>
+        </div>
       </section>
 
 
@@ -1203,6 +1223,7 @@
             <option value="1000">1,000만원 이상</option>
           </select>
         </div>
+        <label class="expired-toggle"><input id="show-expired" type="checkbox"> 마감이 지난 공고도 보기</label>
       </section>
 
       <div class="tabs" role="tablist" aria-label="지원 대상">
@@ -1214,8 +1235,12 @@
       <section class="layout">
         <div>
 
-          <section class="ad-slot" id="ad-results" aria-label="광고 영역 결과 중간">
-            <div class="ad-fallback"><span class="ad-label">AD</span>검색 결과 사이에 표시되는 네이티브 광고 슬롯</div>
+          <section class="ad-slot student-promo reminder-promo" id="ad-results" aria-label="추천 앱: Everytime Reminder">
+            <div class="promo-inner">
+              <div class="promo-icon" aria-hidden="true">🔔</div>
+              <div class="promo-copy"><span class="ad-label">추천 앱</span><h3>수업, 알바, 장학금 마감일을 한 번에</h3><p>애브리타임 리마인더에 일정만 적으면 중요한 시간 전에 미리 알려드려요.</p></div>
+              <a class="promo-cta" data-promo="everytime-reminder" href="https://apps.apple.com/kr/app/everytime-reminder/id6774095537?uo=4" target="_blank" rel="noopener">무료로 시작하기</a>
+            </div>
           </section>
 
           <div class="list" id="scholarship-list" aria-live="polite"></div>
@@ -1446,7 +1471,8 @@
     function normalise(item) {
       const deadlineDate = item.deadline ? new Date(item.deadline) : null;
       const daysLeft = Number.isFinite(item.daysLeft) ? item.daysLeft : (deadlineDate ? Math.ceil((deadlineDate - Date.now()) / 86400000) : 999);
-      return { ...item, daysLeft, tags: item.tags || [], amount: Number(item.amount || 0), amountLabel: item.amountLabel || "공고 원문에서 확인", period: item.period || "공고 원문에서 확인", competition: item.competition || "공식 평가자료 없음", reviews: item.reviews || "후기 데이터 없음" };
+      const dueDateLabel = deadlineDate && !Number.isNaN(deadlineDate.getTime()) ? deadlineDate.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" }) : null;
+      return { ...item, daysLeft, dueDateLabel, tags: item.tags || [], amount: Number(item.amount || 0), amountLabel: item.amountLabel || "공고 원문에서 확인", period: item.period || "공고 원문에서 확인", competition: item.competition || "공식 평가자료 없음", reviews: item.reviews || "후기 데이터 없음" };
     }
 
     async function refreshData() {
@@ -1459,20 +1485,26 @@
         if (!Array.isArray(remote) || !remote.length) throw new Error("공고 데이터가 비어 있습니다");
         scholarships = remote.map(normalise);
         const updated = new Date().toLocaleString("ko-KR", { dateStyle: "short", timeStyle: "short" });
-        document.querySelector("#refresh-title").textContent = `최신 데이터 · ${updated}`;
-        document.querySelector("#refresh-status").textContent = "공식 출처 링크 포함 · 새로고침으로 다시 확인";
+        const refreshTitle = document.querySelector("#refresh-title"); const refreshStatus = document.querySelector("#refresh-status");
+        if (refreshTitle) refreshTitle.textContent = `최신 데이터 · ${updated}`;
+        if (refreshStatus) refreshStatus.textContent = "공식 출처 링크 포함 · 새로고침으로 다시 확인";
         status.textContent = `${scholarships.length}개 공고를 불러왔습니다.`;
         render();
         renderHome();
         renderBrowseModes();
+        updatePortalMeta();
+        updateHeroCounts();
       } catch (error) {
         scholarships = demoScholarships.map(normalise);
-        document.querySelector("#refresh-title").textContent = "공고 데이터 표시 중";
-        document.querySelector("#refresh-status").textContent = "공식 출처 링크 기준으로 최신 공고를 확인하세요";
+        const refreshTitle = document.querySelector("#refresh-title"); const refreshStatus = document.querySelector("#refresh-status");
+        if (refreshTitle) refreshTitle.textContent = "공고 데이터 표시 중";
+        if (refreshStatus) refreshStatus.textContent = "공식 출처 링크 기준으로 최신 공고를 확인하세요";
         status.textContent = "기본 공고 데이터를 표시합니다.";
         render();
         renderHome();
         renderBrowseModes();
+        updatePortalMeta();
+        updateHeroCounts();
       }
     }
 
@@ -1496,7 +1528,7 @@
     }
 
     function renderHome() {
-      const recent = [...scholarships].map(normalise).sort((a, b) => {
+      const recent = [...scholarships].map(normalise).filter((item) => item.daysLeft >= 0).sort((a, b) => {
         const schoolBoostA = profile.school && a.school === profile.school ? -1000 : 0;
         const schoolBoostB = profile.school && b.school === profile.school ? -1000 : 0;
         return (a.daysLeft + schoolBoostA) - (b.daysLeft + schoolBoostB);
@@ -1510,7 +1542,7 @@
             <div class="actions"><a class="secondary" href="${item.url}" target="_blank" rel="noreferrer">원문 보기</a><button class="secondary auto-enroll" type="button" data-title="${item.title}">자동 등록</button></div>
           </article>`).join("");
       }
-      const matched = scholarships.filter(profileMatches);
+      const matched = scholarships.filter((item) => item.daysLeft >= 0 && profileMatches(item));
       const soon = matched.filter((item) => item.daysLeft <= 14);
       document.querySelector("#match-count").textContent = `${matched.length}개`;
       document.querySelector("#soon-count").textContent = `${soon.length}개`;
@@ -1558,7 +1590,7 @@
     const i18n = {
       ko: {
         title: "내 학교·지역·전공에 맞는 장학금 찾기",
-        subtitle: "로그인 없이도 최근·지역·전공·학교별 장학금을 검색할 수 있습니다. 로그인하면 저장과 맞춤 추천이 편해집니다.",
+        subtitle: "로그인 없이도 최근·지역·전공·학교별 장학금을 검색할 수 있습니다. 로그인하면 저장과 알림 관리가 편해집니다.",
         languageLabel: "언어",
         languageStatus: "외국인 학생을 위한 영어/다국어 시스템 준비됨",
         setupTitle: "대학교 장학금 셋업",
@@ -1788,35 +1820,32 @@
       const total = scholarships.length;
       const school = scholarships.filter((item)=>item.source === "university").length;
       const soon = scholarships.map(normalise).filter((item)=>item.daysLeft <= 21).length;
-      document.querySelector("#hero-total-count").textContent = `${total}개 공고`;
-      document.querySelector("#hero-school-count").textContent = `학교별 ${school}개`;
-      document.querySelector("#hero-soon-count").textContent = `21일 이내 ${soon}개`;
+      const heroTotal = document.querySelector("#hero-total-count");
+      const heroSchool = document.querySelector("#hero-school-count");
+      const heroSoon = document.querySelector("#hero-soon-count");
+      if (heroTotal) heroTotal.textContent = `${total}개 공고`;
+      if (heroSchool) heroSchool.textContent = `학교별 ${school}개`;
+      if (heroSoon) heroSoon.textContent = `21일 이내 ${soon}개`;
     }
 
     function renderBrowseModes() {
-  
-    const portalSearchBound = true;
-    document.querySelector("#portal-search-button").addEventListener("click", portalSearch);
-    document.querySelector("#portal-search").addEventListener("keydown", (event) => { if (event.key === "Enter") portalSearch(); });
-    document.querySelector("#portal-login").addEventListener("click", () => { const card=document.querySelector(".home-grid"); card.style.display="grid"; card.scrollIntoView({behavior:"smooth",block:"start"}); document.querySelector("#quick-username").focus(); });
-    document.querySelectorAll(".portal-filter").forEach((button) => button.addEventListener("click", () => { activeBrowseMode=button.dataset.portalMode; localStorage.setItem("scholarcloud-browse-mode",activeBrowseMode); renderBrowseModes(); scrollToSection("browse-modes"); }));
 
     document.querySelectorAll(".browse-mode").forEach((btn) => btn.classList.toggle("active", btn.dataset.mode === activeBrowseMode));
       const box = document.querySelector("#browse-results");
       if (!box) return;
       let rows = [];
       if (activeBrowseMode === "recent") {
-        rows = [...scholarships].map(normalise).sort((a,b)=>a.daysLeft-b.daysLeft).slice(0,6).map((item)=>({title:item.title, meta:`${item.provider} · D-${item.daysLeft}`, sub:item.amountLabel}));
+        rows = [...scholarships].map(normalise).filter((item)=>item.daysLeft>=0).sort((a,b)=>a.daysLeft-b.daysLeft).slice(0,6).map((item)=>({title:item.title, meta:`${item.provider} · D-${item.daysLeft}`, sub:item.amountLabel}));
       } else if (activeBrowseMode === "region") {
         const groups = {};
-        scholarships.forEach((item)=>{ const key=itemRegion(item); groups[key]=(groups[key]||0)+1; });
+        scholarships.filter((item)=>item.daysLeft>=0).forEach((item)=>{ const key=itemRegion(item); groups[key]=(groups[key]||0)+1; });
         rows = Object.entries(groups).sort((a,b)=>b[1]-a[1]).map(([title,count])=>({title, meta:`${count}개 공고`, sub:"지역 장학금과 통학 가능 공고를 함께 확인"}));
       } else if (activeBrowseMode === "major") {
         const groups = {};
-        scholarships.forEach((item)=>{ const key=itemMajor(item); groups[key]=(groups[key]||0)+1; });
+        scholarships.filter((item)=>item.daysLeft>=0).forEach((item)=>{ const key=itemMajor(item); groups[key]=(groups[key]||0)+1; });
         rows = Object.entries(groups).sort((a,b)=>b[1]-a[1]).map(([title,count])=>({title, meta:`${count}개 공고`, sub:"전공/전문 과목 기반 추천"}));
       } else {
-        rows = scholarships.filter((item)=>!profile.school || item.school === profile.school || item.source !== "university").slice(0,6).map((item)=>({title:item.title, meta:`${item.provider} · ${sourceLabel(item.source)}`, sub:item.region || "전국"}));
+        rows = scholarships.filter((item)=>item.daysLeft>=0 && (!profile.school || item.school === profile.school || item.source !== "university")).slice(0,6).map((item)=>({title:item.title, meta:`${item.provider} · ${sourceLabel(item.source)}`, sub:item.region || "전국"}));
       }
       box.innerHTML = rows.slice(0,6).map((row)=>`<article class="browse-card"><strong>${row.title}</strong><span>${row.meta}</span><span>${row.sub}</span></article>`).join("");
     }
@@ -1919,13 +1948,15 @@
       const term = search.value.trim().toLowerCase();
       const maxDeadline = deadline.value === "all" ? Infinity : Number(deadline.value);
       const minAmount = Number(amount.value);
+      const showExpired = document.querySelector("#show-expired")?.checked;
       const filtered = scholarships.filter((item) => {
         const tabMatch = activeTab === "all" || item.audience === activeTab;
         const sourceMatch = source.value === "all" || item.source === source.value;
         const deadlineMatch = item.daysLeft <= maxDeadline;
         const amountMatch = item.amount >= minAmount;
+        const expiredMatch = showExpired || item.daysLeft >= 0;
         const text = [item.title, item.provider, item.amountLabel, item.period, item.competition, item.reviews, ...item.tags].join(" ").toLowerCase();
-        return tabMatch && sourceMatch && deadlineMatch && amountMatch && profileMatches(item) && text.includes(term);
+        return tabMatch && sourceMatch && deadlineMatch && amountMatch && expiredMatch && profileMatches(item) && text.includes(term);
       });
 
       list.innerHTML = filtered.map((item) => `
@@ -1934,10 +1965,12 @@
             <div>
               <h2>${item.title}</h2>
               <div class="meta">${item.provider} · 마감 D-${item.daysLeft}</div>
+              <div class="due-date-line">${item.dueDateLabel ? `마감일 ${item.dueDateLabel}` : "마감일 공고 원문에서 확인"}${item.daysLeft < 0 ? " · 마감됨" : ""}</div>
             </div>
             <button class="icon-button save" type="button" aria-label="${item.title} 찜하기" title="찜하기">☆</button>
           </div>
           <div class="badges">
+            ${item.daysLeft < 0 ? `<span class="badge expired">마감된 공고</span>` : ""}
             <span class="badge ${item.source}">${sourceLabel(item.source)}</span>
             ${item.tags.map((tag) => `<span class="badge">${tag}</span>`).join("")}
           </div>
@@ -1979,6 +2012,7 @@
     });
 
     [search, source, deadline, amount].forEach((control) => control.addEventListener("input", render));
+    document.querySelector("#show-expired").addEventListener("change", render);
     document.querySelector("#refresh-data").addEventListener("click", refreshData);
     function loadProfile() {
       document.querySelector("#profile-age").value = profile.age || "";
@@ -2047,6 +2081,13 @@
     document.querySelector("#apply-onboarding").addEventListener("click", () => { localStorage.setItem("scholarcloud-registration-complete", "true"); document.querySelector("#account-status").textContent = "BlueCloud 등록 완료: AI 수집 프로필 기준"; alert("BlueCloud 등록 기준이 저장되었습니다. 이제 학교/지역/특별조건 기반 장학금이 우선 표시됩니다."); });
 
 
+
+
+    const portalSearchBound = true;
+    document.querySelector("#portal-search-button").addEventListener("click", portalSearch);
+    document.querySelector("#portal-search").addEventListener("keydown", (event) => { if (event.key === "Enter") portalSearch(); });
+    document.querySelector("#portal-login").addEventListener("click", () => { const card=document.querySelector(".home-grid"); card.style.display="grid"; card.scrollIntoView({behavior:"smooth",block:"start"}); document.querySelector("#quick-username").focus(); });
+    document.querySelectorAll(".portal-filter").forEach((button) => button.addEventListener("click", () => { activeBrowseMode=button.dataset.portalMode; localStorage.setItem("scholarcloud-browse-mode",activeBrowseMode); renderBrowseModes(); scrollToSection("browse-modes"); }));
 
     document.querySelectorAll(".browse-mode").forEach((button) => button.addEventListener("click", () => {
       activeBrowseMode = button.dataset.mode;
@@ -2135,6 +2176,11 @@
       try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) {}
     }
     initAdSlots();
+    document.querySelectorAll('[data-promo]').forEach((link) => link.addEventListener('click', () => {
+      const key = `scholarcloud-promo-${link.dataset.promo}-clicks`;
+      localStorage.setItem(key, String(Number(localStorage.getItem(key) || 0) + 1));
+    }));
+
   </script>
 </body>
 </html>
