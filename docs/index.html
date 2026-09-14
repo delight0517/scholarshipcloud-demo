@@ -694,6 +694,23 @@
     .google-signup { background: #fff; color: #111827; border: 1px solid var(--line); }
     @media (max-width:760px){ .ai-onboarding{border-radius:24px;padding:16px}.ai-answer-row{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr 1fr}.msg{max-width:94%} }
 
+
+
+    /* 2026-09-14 university setup + multilingual support */
+    .lang-switcher { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .lang-switcher select { min-height: 40px; border-radius: 999px; font-weight: 800; }
+    .university-setup { display: none; background: linear-gradient(135deg, #eef2ff, #ffffff); border: 1px solid #c7d2fe; border-radius: 24px; padding: 18px; box-shadow: var(--shadow); gap: 14px; }
+    .university-setup.active { display: grid; }
+    .setup-head { display: flex; justify-content: space-between; gap: 12px; align-items: start; flex-wrap: wrap; }
+    .setup-steps { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+    .setup-step { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 12px; display: grid; gap: 6px; }
+    .setup-step b { font-size: 13px; }
+    .setup-step span { color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .setup-step.done { border-color: #86efac; background: #f0fdf4; }
+    .setup-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .setup-status { color: var(--muted); font-size: 13px; }
+    @media(max-width:760px){ .setup-steps{grid-template-columns:1fr 1fr}.setup-actions{display:grid}.setup-actions .primary,.setup-actions .secondary{width:100%} }
+
   </style>
 </head>
 <body>
@@ -721,6 +738,21 @@
         <div class="refresh" aria-label="데이터 새로고침 상태">
           <strong id="refresh-title">실시간 데이터 준비 중</strong>
           <span id="refresh-status">공식 출처 데이터 확인 중</span>
+        </div>
+      </section>
+
+
+      <section class="live-tools" aria-label="언어 설정">
+        <div class="lang-switcher">
+          <label for="language-select" data-i18n="languageLabel">언어</label>
+          <select id="language-select" aria-label="Language">
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+            <option value="ja">日本語 준비중</option>
+            <option value="zh">中文 准备中</option>
+            <option value="vi">Tiếng Việt sắp ra mắt</option>
+          </select>
+          <span class="live-status" id="language-status">외국인 학생을 위한 영어/다국어 시스템 준비됨</span>
         </div>
       </section>
 
@@ -785,6 +817,28 @@
           <h3>등록 기준 요약</h3>
           <div class="summary-grid" id="summary-grid"></div>
           <button class="primary" id="apply-onboarding" type="button">이 정보로 BlueCloud 등록 완료</button>
+        </div>
+      </section>
+
+
+      <section class="university-setup" id="university-setup" aria-label="대학교 장학금 셋업">
+        <div class="setup-head">
+          <div>
+            <h3 id="setup-title">대학교 장학금 셋업</h3>
+            <p class="school-note" id="setup-copy">BlueCloud 가입 대학교가 확인되면 그 학교의 장학금 페이지, 교내 공지, 학생처 기준을 자동으로 셋업합니다.</p>
+          </div>
+          <span class="badge university" id="setup-school-badge">학교 미선택</span>
+        </div>
+        <div class="setup-steps">
+          <div class="setup-step" data-setup-step="portal"><b>1. 학교 포털</b><span>장학/학생지원 공지 위치 저장</span></div>
+          <div class="setup-step" data-setup-step="rules"><b>2. 선발 기준</b><span>성적, 소득, 외국인, 지역 조건 분류</span></div>
+          <div class="setup-step" data-setup-step="calendar"><b>3. 마감 캘린더</b><span>신청 시작/마감 알림 예약</span></div>
+          <div class="setup-step" data-setup-step="auto"><b>4. 자동 등록</b><span>Plus 신청 대기열과 연결</span></div>
+        </div>
+        <div class="setup-actions">
+          <button class="primary" id="setup-university" type="button">내 대학교 장학금 셋업</button>
+          <button class="secondary" id="setup-foreign" type="button">외국인 학생 조건 포함</button>
+          <span class="setup-status" id="setup-status">대학교를 선택하거나 AI 상담에서 학교를 알려주세요.</span>
         </div>
       </section>
 
@@ -1176,6 +1230,71 @@
 
 
 
+
+
+    const schoolCatalog = {
+      hongik_sejong: { ko: "홍익대학교 세종캠퍼스", en: "Hongik University Sejong Campus", portal: "https://sejong.hongik.ac.kr/", region: "세종" },
+      korea_sejong: { ko: "고려대학교 세종캠퍼스", en: "Korea University Sejong Campus", portal: "https://sejong.korea.ac.kr/", region: "세종" }
+    };
+    const i18n = {
+      ko: {
+        title: "내 조건에 맞는 장학금과 해외 유학 지원 공고",
+        subtitle: "마감일, 지원 대상, 정부/기업/학교 구분, 지원 금액, 지역, 대학교 장학금을 한 화면에서 비교합니다.",
+        languageLabel: "언어",
+        languageStatus: "외국인 학생을 위한 영어/다국어 시스템 준비됨",
+        setupTitle: "대학교 장학금 셋업",
+        setupCopy: "BlueCloud 가입 대학교가 확인되면 그 학교의 장학금 페이지, 교내 공지, 학생처 기준을 자동으로 셋업합니다.",
+        setupButton: "내 대학교 장학금 셋업",
+        foreignButton: "외국인 학생 조건 포함"
+      },
+      en: {
+        title: "Scholarships matched to your school, region, and situation",
+        subtitle: "Compare deadlines, eligibility, funding type, university scholarships, region-based aid, and study-abroad programs in one place.",
+        languageLabel: "Language",
+        languageStatus: "English is enabled. More languages are structured for international students.",
+        setupTitle: "University scholarship setup",
+        setupCopy: "When your BlueCloud university is confirmed, we set up that school's scholarship notices, student office rules, deadlines, and eligible programs.",
+        setupButton: "Set up my university scholarships",
+        foreignButton: "Include international student rules"
+      },
+      ja: {}, zh: {}, vi: {}
+    };
+    let currentLang = localStorage.getItem("scholarcloud-language") || "ko";
+
+    function t(key) { return (i18n[currentLang] && i18n[currentLang][key]) || i18n.ko[key] || key; }
+    function applyLanguage() {
+      document.querySelector("#page-title").textContent = t("title");
+      document.querySelector(".subtitle").textContent = t("subtitle");
+      document.querySelector("#language-status").textContent = t("languageStatus");
+      document.querySelector("#setup-title").textContent = t("setupTitle");
+      document.querySelector("#setup-copy").textContent = t("setupCopy");
+      document.querySelector("#setup-university").textContent = t("setupButton");
+      document.querySelector("#setup-foreign").textContent = t("foreignButton");
+      document.querySelector("#language-select").value = currentLang;
+      document.querySelectorAll("[data-i18n]").forEach((node) => node.textContent = t(node.dataset.i18n));
+      renderUniversitySetup();
+    }
+
+    function renderUniversitySetup() {
+      const setup = document.querySelector("#university-setup");
+      const school = profile.school || "";
+      const catalog = schoolCatalog[school];
+      if (!setup) return;
+      setup.classList.toggle("active", Boolean(school));
+      document.querySelector("#setup-school-badge").textContent = catalog ? (catalog[currentLang] || catalog.ko) : "학교 미선택";
+      document.querySelector("#setup-status").textContent = catalog ? `${catalog.ko} 장학금 셋업 준비됨 · ${catalog.region}권 우선` : "대학교를 선택하거나 AI 상담에서 학교를 알려주세요.";
+    }
+
+    function setupUniversityScholarships(includeForeign = false) {
+      if (!profile.school) { document.querySelector("#setup-status").textContent = "먼저 대학교를 선택해주세요."; return; }
+      const school = schoolCatalog[profile.school];
+      const setup = { school: profile.school, includeForeign, portal: school.portal, region: school.region, setupAt: new Date().toISOString(), steps: ["portal", "rules", "calendar", "auto"] };
+      localStorage.setItem("scholarcloud-university-setup", JSON.stringify(setup));
+      document.querySelectorAll(".setup-step").forEach((step) => step.classList.add("done"));
+      document.querySelector("#setup-status").textContent = `${school.ko} 셋업 완료: 교내 장학금, 지역 장학금${includeForeign ? ", 외국인 학생 조건" : ""}을 맞춤 공고에 반영합니다.`;
+      renderHome();
+    }
+
     const onboardingQuestions = [
       { key: "situation", label: "상황", q: "지금 상황을 알려주세요. 학년, 전공, 성적/소득/근로 여부, 필요한 지원 형태를 편하게 적어주세요.", chips: ["생활비 장학금이 급해요", "등록금 감면 위주", "이공계 성적 장학", "근로장학도 가능"] },
       { key: "region", label: "지역", q: "주로 확인할 지역은 어디인가요? 거주지, 학교 위치, 통학 가능 지역을 알려주세요.", chips: ["세종", "대전/세종/충청", "서울", "전국 가능"] },
@@ -1244,7 +1363,7 @@
       profile = { ...profile, field: [onboardingProfile.situation, onboardingProfile.special].filter(Boolean).join(" ").slice(0, 80), school, region, onboarding: onboardingProfile };
       localStorage.setItem("scholarcloud-profile", JSON.stringify(profile));
       document.querySelector("#summary-grid").innerHTML = onboardingQuestions.map((q) => `<div><span>${q.label}</span><strong>${onboardingProfile[q.key] || "미입력"}</strong></div>`).join("");
-      if (school) syncSchoolChoice(school); else { render(); renderHome(); }
+      if (school) syncSchoolChoice(school); else { render(); renderHome(); renderUniversitySetup(); }
     }
 
     function render() {
@@ -1342,6 +1461,7 @@
       document.querySelectorAll(".school-chip").forEach((chip) => chip.classList.toggle("active", chip.dataset.school === value));
       render();
       renderHome();
+      renderUniversitySetup();
     }
     document.querySelector("#profile-school").addEventListener("change", (event) => syncSchoolChoice(event.target.value));
     document.querySelector("#profile-school-mirror").addEventListener("change", (event) => syncSchoolChoice(event.target.value));
@@ -1373,6 +1493,11 @@
     document.querySelector("#ai-suggestions").addEventListener("click", (event) => { const chip = event.target.closest(".ai-suggestion"); if (chip) submitOnboardingAnswer(chip.textContent); });
     document.querySelector("#google-signup").addEventListener("click", () => { localStorage.setItem("scholarcloud-auth", JSON.stringify({ username: "google-user", provider: "google", remember: true, loginAt: new Date().toISOString() })); document.querySelector("#account-status").textContent = "Google BlueCloud 가입 흐름 준비됨"; document.querySelector("#login-chip").textContent = "Google 가입 후 AI 등록"; openOnboarding(true); });
     document.querySelector("#apply-onboarding").addEventListener("click", () => { localStorage.setItem("scholarcloud-registration-complete", "true"); document.querySelector("#account-status").textContent = "BlueCloud 등록 완료: AI 수집 프로필 기준"; alert("BlueCloud 등록 기준이 저장되었습니다. 이제 학교/지역/특별조건 기반 장학금이 우선 표시됩니다."); });
+
+
+    document.querySelector("#language-select").addEventListener("change", (event) => { currentLang = event.target.value; localStorage.setItem("scholarcloud-language", currentLang); applyLanguage(); });
+    document.querySelector("#setup-university").addEventListener("click", () => setupUniversityScholarships(false));
+    document.querySelector("#setup-foreign").addEventListener("click", () => setupUniversityScholarships(true));
 
     document.querySelector("#bluecloud-account").addEventListener("click", async () => {
       const username = prompt("BlueCloud 아이디를 입력하세요 (새 계정이면 자동 가입 시도)");
@@ -1412,6 +1537,7 @@
     renderHome();
     loadProfile();
     refreshData();
+    applyLanguage();
     function showAdUpToThreeTimesDaily() {
       const key = `scholarcloud-ad-${new Date().toISOString().slice(0, 10)}`;
       const seen = Number(localStorage.getItem(key) || 0);
