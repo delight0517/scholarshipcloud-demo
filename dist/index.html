@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>대학교·대학원 장학금 공고 검색 - ScholarshipCloud</title>
-  <meta name="description" content="장학금 AI로 대학교·대학원·지역·전공별 장학금을 검색하세요. 로그인 없이 최근 공고를 보고, BlueCloud 로그인 후 맞춤 추천과 알림을 이어갑니다.">
+  <title>ScholarshipCloud Plus - 장학금·알바 자동지원 관리 서비스</title>
+  <meta name="description" content="장학금과 대학생 알바를 한곳에서 찾고, 회원가입 후 정액권을 구매하면 채팅으로 자동 지원 관리까지 체험할 수 있는 ScholarshipCloud Plus 공개 데모입니다.">
   <meta name="keywords" content="장학금 AI, 장학금 AI로 찾기, AI 장학금 추천, 장학금 모음 사이트, 대학교 장학금, 대학원 장학금, 지역별 장학금, 전공별 장학금, 외국인 학생 장학금">
   <meta name="author" content="ScholarshipCloud">
   <link rel="canonical" href="https://delight0517.github.io/scholarshipcloud-demo/">
@@ -930,6 +930,46 @@
   
 .seo-block, #ai-onboarding { display:none !important; }
 #ask-ai-panel.open { display: grid !important; }
+
+    /* 2026-09-16 public SaaS demo: membership, subscription, chat-managed job apply */
+    .flow-guide,.flow-hub,.home-grid,.subscription-card,.ai-onboarding { display:grid !important; }
+    .subscription-card { scroll-margin-top:18px; }
+    .saas-hero { background:linear-gradient(135deg,#102033,#2855b8); color:#fff; border-radius:22px; padding:26px; display:grid; gap:18px; box-shadow:var(--shadow); }
+    .saas-hero h2 { margin:0; font-size:clamp(25px,4vw,42px); letter-spacing:-.04em; }
+    .saas-hero p { margin:0; color:#dbe7ff; line-height:1.7; max-width:820px; }
+    .saas-actions { display:flex; flex-wrap:wrap; gap:10px; }
+    .saas-actions button,.saas-actions a { border:0; border-radius:12px; padding:12px 15px; font-weight:900; cursor:pointer; text-decoration:none; }
+    .saas-actions .main { background:#2dd4bf; color:#082f49; }
+    .saas-actions .ghost { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.22); }
+    .saas-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .saas-card,.job-card,.chat-service,.signup-card { background:#fff; border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow:0 8px 24px rgba(16,24,40,.06); }
+    .saas-card h3,.job-card h3,.chat-service h3,.signup-card h3 { margin:0 0 8px; }
+    .saas-card p,.job-card p,.chat-service p,.signup-card p { color:var(--muted); line-height:1.55; margin:0; }
+    .plan-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .plan { border:1px solid var(--line); border-radius:16px; padding:16px; background:#fbfcff; display:grid; gap:10px; }
+    .plan.featured { border-color:#2855b8; background:#eef4ff; }
+    .plan strong { font-size:22px; }
+    .plan button,.job-card button,.signup-card button,.chat-service button { border:0; border-radius:10px; background:#2855b8; color:#fff; min-height:42px; padding:0 13px; font-weight:900; cursor:pointer; }
+    .job-board { display:grid; gap:14px; }
+    .job-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .job-card { display:grid; gap:10px; }
+    .job-meta { display:flex; flex-wrap:wrap; gap:6px; }
+    .job-meta span { background:#f2f4f7; border-radius:999px; padding:5px 8px; font-size:12px; color:#475467; font-weight:800; }
+    .chat-service { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr); gap:16px; align-items:start; }
+    .chat-window { border:1px solid var(--line); border-radius:16px; background:#f8fafc; padding:14px; min-height:260px; display:grid; align-content:start; gap:10px; }
+    .bubble { max-width:86%; padding:10px 12px; border-radius:14px; line-height:1.45; font-size:14px; }
+    .bubble.ai { background:#fff; border:1px solid var(--line); }
+    .bubble.me { background:#2855b8; color:#fff; justify-self:end; }
+    .chat-input-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; }
+    .queue-list { display:grid; gap:8px; }
+    .queue-item { border:1px solid var(--line); border-radius:12px; padding:10px; background:#fff; display:flex; justify-content:space-between; gap:8px; align-items:center; }
+    .queue-item b { display:block; }
+    .queue-item small { color:var(--muted); }
+    .signup-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .signup-grid input,.signup-grid select { width:100%; }
+    .status-pill { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:7px 10px; background:#ecfdf3; color:#067647; font-weight:900; font-size:12px; }
+    @media(max-width:900px){ .saas-grid,.plan-row,.job-grid,.chat-service,.signup-grid{grid-template-columns:1fr;} }
+
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -1032,6 +1072,70 @@
           <div class="promo-copy"><span class="ad-label">추천 앱</span><h3>장학금 준비, 25분씩 끝내세요</h3><p>auto pomodoro로 서류 정리와 에세이 준비 시간을 집중 단위로 관리해보세요.</p></div>
           <a class="promo-cta" data-promo="auto-pomodoro" href="https://apps.apple.com/kr/app/auto-pomodoro/id6805697231?uo=4" target="_blank" rel="noopener">App Store에서 보기</a>
         </div>
+      </section>
+
+
+
+
+      <section class="saas-hero" id="plus-service" aria-label="ScholarshipCloud Plus 서비스 소개">
+        <span class="status-pill">공개 데모 오픈 · 회원가입/정액권/알바 지원 흐름 체험 가능</span>
+        <h2>정액권을 구매하면 채팅으로 장학금과 알바 자동 신청을 관리합니다</h2>
+        <p>ScholarshipCloud Plus는 학교·지역·전공 조건을 저장한 뒤, AI 채팅을 통해 알바 후보 탐색, 지원서 초안 작성, 지원 대기열 관리, 결과 추적까지 한 화면에서 관리하는 서비스형 데모입니다.</p>
+        <div class="saas-actions">
+          <button class="main" id="hero-signup" type="button">무료 회원가입 시작</button>
+          <button class="ghost" id="hero-subscribe" type="button">정액권 보기</button>
+          <button class="ghost" id="hero-jobs" type="button">알바 신청하기</button>
+        </div>
+      </section>
+
+      <section class="signup-card" id="public-signup" aria-label="회원가입 데모">
+        <h3>누구나 회원가입</h3>
+        <p>데모 계정은 이 브라우저에만 저장됩니다. 실제 서비스에서는 BlueCloud 계정 서버와 결제 서버에 연결합니다.</p>
+        <div class="signup-grid">
+          <input id="demo-name" placeholder="이름 또는 닉네임" autocomplete="name">
+          <input id="demo-email" placeholder="이메일" autocomplete="email">
+          <select id="demo-role"><option>대학생</option><option>대학원생</option><option>취준생</option><option>외국인 유학생</option></select>
+          <input id="demo-school" placeholder="학교/지역 예: 홍익대 세종">
+        </div>
+        <button id="demo-signup" type="button">회원가입 완료</button>
+        <span class="account-status" id="demo-account-status">가입 전</span>
+      </section>
+
+      <section class="home-card subscription-card" id="paid-plans" aria-label="정액권 구매 데모">
+        <div class="home-card-title"><div><h3>정액권 구매</h3><p class="profile-note">실결제 전 데모입니다. 버튼을 누르면 구독 상태가 저장되고 자동 지원 기능이 열립니다.</p></div><span class="status-pill" id="demo-plan-status">Free</span></div>
+        <div class="plan-row">
+          <div class="plan"><b>Free</b><strong>₩0</strong><span>공고 검색, 직접 저장</span><button data-plan="Free" type="button">현재 플랜</button></div>
+          <div class="plan featured"><b>Plus</b><strong>월 ₩20,000</strong><span>채팅형 자동 지원 관리, 알바 대기열, 마감 알림</span><button data-plan="Plus" type="button">Plus 정액권 구매</button></div>
+          <div class="plan"><b>Pro</b><strong>월 ₩49,000</strong><span>포트폴리오/자기소개서 템플릿, 우선 후보 분석</span><button data-plan="Pro" type="button">Pro 예약 구매</button></div>
+        </div>
+      </section>
+
+      <section class="job-board" id="job-apply" aria-label="알바 신청">
+        <div class="home-card-title"><div><h3>사이트 안에서 알바 신청</h3><p class="profile-note">재택 AI 데이터, 온라인 코딩강사, 과외/멘토링 후보를 바로 신청 대기열에 넣습니다.</p></div><span class="small">무료 지원 후보만 표시</span></div>
+        <div class="job-grid" id="demo-job-list"></div>
+      </section>
+
+      <section class="chat-service" id="auto-apply-chat" aria-label="채팅 자동 지원 관리">
+        <div>
+          <h3>채팅으로 자동 신청 관리</h3>
+          <p>예: “재택 알바만 골라줘”, “코딩강사 지원서 써줘”, “오늘 지원한 곳 상태 알려줘”처럼 입력하면 지원 대기열과 다음 행동을 갱신합니다.</p>
+          <div class="chat-window" id="demo-chat-log"></div>
+          <div class="chat-input-row">
+            <input id="demo-chat-input" placeholder="알바 자동 신청을 채팅으로 지시하세요">
+            <button id="demo-chat-send" type="button">전송</button>
+          </div>
+        </div>
+        <div>
+          <h3>자동 지원 대기열</h3>
+          <p>민감정보, 비용, 본인인증이 필요한 지원은 제출 직전 사용자 확인으로 멈춥니다.</p>
+          <div class="queue-list" id="demo-queue"></div>
+        </div>
+      </section>
+
+      <section class="saas-grid" aria-label="서비스 기능 요약">
+        <div class="saas-card"><h3>1. 조건 저장</h3><p>학교, 지역, 전공, 희망 알바 유형을 저장해 매칭 기준으로 사용합니다.</p></div>
+        <div class="saas-card"><h3>2. 자동 신청 관리</h3><p>무료 지원 가능한 알바/장학금만 대기열에 올리고, 위험하거나 유료인 건은 보류합니다.</p></div>
+        <div class="saas-card"><h3>3. 결과 추적</h3><p>지원 완료, 검수 대기, 추가 자료 요청 상태를 채팅과 대시보드에서 같이 보여줍니다.</p></div>
       </section>
 
 
@@ -2334,6 +2438,42 @@
       localStorage.setItem(key, String(seen + 1));
       try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) {}
     }
+
+
+    // 2026-09-16 public SaaS demo interactions
+    const demoJobs = [
+      { title: "재택 AI 데이터 검수 알바", pay: "건별/시급형", tags: ["재택", "무료지원", "한국어"], detail: "한국어 문장 검수와 간단한 라벨링 작업을 우선 매칭합니다." },
+      { title: "온라인 코딩강사/멘토", pay: "₩20,000/h부터", tags: ["온라인", "강사", "포트폴리오"], detail: "초중고 AI 앱개발·게임기획 수업 후보에 지원합니다." },
+      { title: "장학금 서류 리서치 보조", pay: "프로젝트형", tags: ["대학생", "문서", "마감관리"], detail: "학교 공지와 장학금 마감일 정리 작업을 신청합니다." }
+    ];
+    function getDemoQueue(){ return JSON.parse(localStorage.getItem("scholarcloud-demo-queue") || "[]"); }
+    function setDemoQueue(q){ localStorage.setItem("scholarcloud-demo-queue", JSON.stringify(q)); renderDemoQueue(); }
+    function addDemoBubble(text, who="ai"){ const log=document.querySelector("#demo-chat-log"); if(!log) return; const b=document.createElement("div"); b.className=`bubble ${who}`; b.textContent=text; log.appendChild(b); log.scrollTop=log.scrollHeight; }
+    function renderDemoJobs(){ const wrap=document.querySelector("#demo-job-list"); if(!wrap) return; wrap.innerHTML=demoJobs.map((job,i)=>`<article class="job-card"><h3>${job.title}</h3><p>${job.detail}</p><div class="job-meta"><span>${job.pay}</span>${job.tags.map(t=>`<span>${t}</span>`).join("")}</div><button type="button" data-demo-job="${i}">이 알바 신청 대기열에 추가</button></article>`).join(""); }
+    function renderDemoQueue(){ const wrap=document.querySelector("#demo-queue"); if(!wrap) return; const q=getDemoQueue(); wrap.innerHTML=q.length ? q.map((item,idx)=>`<div class="queue-item"><div><b>${item.title}</b><small>${item.status}</small></div><button type="button" data-remove-queue="${idx}">완료</button></div>`).join("") : `<div class="queue-item"><div><b>대기열 비어 있음</b><small>알바 신청 버튼이나 채팅으로 추가하세요.</small></div></div>`; }
+    function initSaasDemo(){
+      renderDemoJobs(); renderDemoQueue();
+      const user=JSON.parse(localStorage.getItem("scholarcloud-demo-user")||"null");
+      const plan=localStorage.getItem("scholarcloud-demo-plan")||"Free";
+      const accountStatus=document.querySelector("#demo-account-status"); if(accountStatus) accountStatus.textContent=user ? `${user.name} 가입 완료 · ${user.school}` : "가입 전";
+      const planStatus=document.querySelector("#demo-plan-status"); if(planStatus) planStatus.textContent=plan;
+      if(document.querySelector("#demo-chat-log")?.children.length===0){ addDemoBubble("안녕하세요. Plus 구독 후에는 제가 무료 지원 가능한 알바를 찾고, 지원서 초안과 대기열을 관리해드립니다."); }
+    }
+    document.addEventListener("click", (event)=>{
+      const scrollButton=event.target.closest("#hero-signup,#hero-subscribe,#hero-jobs");
+      if(scrollButton){ const map={"hero-signup":"public-signup","hero-subscribe":"paid-plans","hero-jobs":"job-apply"}; document.querySelector(`#${map[scrollButton.id]}`)?.scrollIntoView({behavior:"smooth",block:"start"}); }
+      const planBtn=event.target.closest("[data-plan]");
+      if(planBtn){ localStorage.setItem("scholarcloud-demo-plan",planBtn.dataset.plan); document.querySelector("#demo-plan-status").textContent=planBtn.dataset.plan; addDemoBubble(`${planBtn.dataset.plan} 플랜 상태로 변경했습니다. 실제 결제는 PG 서버 연결 후 활성화됩니다.`); }
+      const jobBtn=event.target.closest("[data-demo-job]");
+      if(jobBtn){ const job=demoJobs[Number(jobBtn.dataset.demoJob)]; const q=getDemoQueue(); q.push({title:job.title,status:"지원서 초안 준비 중 · 제출 전 확인 필요"}); setDemoQueue(q); addDemoBubble(`${job.title}을 자동 지원 대기열에 추가했습니다. 비용/본인인증이 있으면 제출 전에 멈춥니다.`); }
+      const removeBtn=event.target.closest("[data-remove-queue]");
+      if(removeBtn){ const q=getDemoQueue(); q.splice(Number(removeBtn.dataset.removeQueue),1); setDemoQueue(q); addDemoBubble("선택한 항목을 완료 처리했습니다."); }
+    });
+    document.querySelector("#demo-signup")?.addEventListener("click",()=>{ const user={name:document.querySelector("#demo-name").value.trim()||"데모 사용자", email:document.querySelector("#demo-email").value.trim(), role:document.querySelector("#demo-role").value, school:document.querySelector("#demo-school").value.trim()||"학교 미입력"}; localStorage.setItem("scholarcloud-demo-user",JSON.stringify(user)); document.querySelector("#demo-account-status").textContent=`${user.name} 가입 완료 · ${user.school}`; document.querySelector("#sidebar-user").textContent=`ScholarshipCloud: ${user.name}`; addDemoBubble(`${user.name}님 가입이 완료되었습니다. 이제 정액권 구매와 알바 자동 지원 관리를 체험할 수 있습니다.`); });
+    document.querySelector("#demo-chat-send")?.addEventListener("click",()=>{ const input=document.querySelector("#demo-chat-input"); const text=input.value.trim(); if(!text) return; input.value=""; addDemoBubble(text,"me"); const q=getDemoQueue(); let answer="요청을 확인했습니다. 무료 지원 가능 여부, 재택/온라인 가능성, 제출 전 확인 필요 여부 기준으로 대기열을 정리하겠습니다."; if(/재택|온라인/.test(text)){ q.push({title:"재택/온라인 우선 후보 자동 탐색",status:"무료 지원 후보만 필터링 중"}); answer="재택/온라인 후보만 필터링해서 대기열에 추가했습니다."; } else if(/지원서|자기소개/.test(text)){ answer="지원서 초안 모드로 전환했습니다. 강점: 앱 개발, AI 활용, KATUSA 영어 경험을 후보별로 맞춰 작성합니다."; } else if(/상태|현황/.test(text)){ answer=`현재 대기열은 ${q.length}건입니다. 본인인증이나 비용 발생 항목은 자동 제출하지 않습니다.`; } if(q.length!==getDemoQueue().length) setDemoQueue(q); addDemoBubble(answer); });
+    document.querySelector("#demo-chat-input")?.addEventListener("keydown",(e)=>{ if(e.key==="Enter") document.querySelector("#demo-chat-send")?.click(); });
+    initSaasDemo();
+
     initAdSlots();
     document.querySelectorAll('[data-promo]').forEach((link) => link.addEventListener('click', () => {
       const key = `scholarcloud-promo-${link.dataset.promo}-clicks`;
