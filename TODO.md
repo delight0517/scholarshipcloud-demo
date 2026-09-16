@@ -31,3 +31,9 @@
 - [ ] Move scholarship profile fields from browser storage to a BlueCloud server-side profile endpoint.
 - [x] Add Korean SEO title, description, keywords, canonical, Open Graph, JSON-LD, robots.txt, and sitemap.xml.
 - [ ] Submit the public URL and sitemap in Google Search Console through Aside.
+
+## 2026-09-16 공개 사이트 복구 피드백
+
+- [x] 사용자가 기존 공개 URL에서 다른 Plus/알바 자동지원 데모가 열린다고 신고함.
+- [x] 기존 장학금 검색 사이트를 덮어쓴 최신 커밋을 되돌리고 공개 페이지를 복구함.
+- [ ] Plus/알바 자동지원 데모가 필요하면 기존 공개 사이트와 분리된 저장소 또는 별도 URL로 배포함.
